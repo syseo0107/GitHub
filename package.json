@@ -4,7 +4,7 @@
   "description": "UKO Design System Storybook - Component library extracted from UKO Dashboard",
   "scripts": {
     "dev": "storybook dev -p 3001 --host 0.0.0.0 --disable-telemetry",
-    "build": "storybook build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' storybook build",
     "preview": "storybook dev",
     "build-storybook": "storybook build"
   },

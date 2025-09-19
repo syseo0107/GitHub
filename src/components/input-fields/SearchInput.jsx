@@ -1,5 +1,5 @@
 import { InputBase, styled } from "@mui/material";
-import SearchIcon from "icons/SearchIcon";
+import SearchIcon from "../../icons/SearchIcon";
 // styled component
 const StyledInputBase = styled(InputBase)(({
   theme,

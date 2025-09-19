@@ -281,3 +281,24 @@ Error:   Failed to scan for dependencies from entries:
     at handleRequest (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:647:17)
     at handleIncomingPacket (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:672:7)
     at Socket.readFromStdout (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:600:7)
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET / HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-manager/runtime.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/storybook-core-core-server-presets-0/common-manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/links-2/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-actions-4/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-backgrounds-6/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-viewport-7/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-outline-10/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/onboarding-1/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-measure-9/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/interactions-11/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-docs-5/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-manager/globals-runtime.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-controls-3/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:45] "GET /sb-addons/essentials-toolbars-8/manager-bundle.js HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:46] code 404, message File not found
+10.12.220.126 - - [19/Sep/2025 05:10:46] "GET /iframe.html?viewMode=story&id=* HTTP/1.1" 404 -
+10.12.220.126 - - [19/Sep/2025 05:10:46] "GET /index.json HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:46] "GET /sb-common-assets/nunito-sans-bold.woff2 HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:46] "GET /sb-common-assets/nunito-sans-regular.woff2 HTTP/1.1" 200 -
+10.12.220.126 - - [19/Sep/2025 05:10:46] "GET /favicon.svg HTTP/1.1" 200 -

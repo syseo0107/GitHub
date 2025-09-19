@@ -1,7 +1,7 @@
 import { IconButton } from "@mui/material";
 import FlexRowAlign from "components/flexbox/FlexRowAlign";
 import { Small } from "components/Typography";
-import ImageUploadIcon from "icons/ImageUploadIcon";
+import ImageUploadIcon from "../../icons/ImageUploadIcon";
 import React from "react"; // ------------------------------------------------------------------
 
 // ------------------------------------------------------------------

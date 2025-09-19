@@ -1,3 +1,4 @@
+import React from 'react';
 import { H1, H2, H3, H4, H5, H6, Paragraph, Small, Span, Tiny } from '../components/Typography';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export

@@ -1,6 +1,6 @@
 import { Checkbox } from "@mui/material";
-import BlankCheckBoxIcon from "icons/BlankCheckBoxIcon";
-import CheckBoxIcon from "icons/CheckBoxIcon";
+import BlankCheckBoxIcon from "../icons/BlankCheckBoxIcon";
+import CheckBoxIcon from "../icons/CheckBoxIcon";
 import React from "react";
 
 const AppCheckBox = props => {

@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from "@mui/material";
-import DeleteIcon from "icons/DeleteIcon";
-import PencilIcon from "icons/PencilIcon";
+import DeleteIcon from "../icons/DeleteIcon";
+import PencilIcon from "../icons/PencilIcon";
 import { Small } from "./Typography"; // component props interface
 
 const MoreOptions = ({

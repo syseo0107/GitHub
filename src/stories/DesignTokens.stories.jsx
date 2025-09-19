@@ -1,3 +1,4 @@
+import React from 'react';
 import tokens from '../tokens/tokens.json';
 import { H3, H4, Paragraph, Small } from '../components/Typography';
 
