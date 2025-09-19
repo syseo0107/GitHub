@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UKO Design System</title>
+    <style>
+        :root {
+            --primary-blue: #5896e1;
+            --primary-light: #a0d4ff;
+            --text-main: #1f2738;
+            --text-muted: #94a4c4;
+            --bg-default: #f9f9f9;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-default);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-light));
+            color: white;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .typography-demo h1 { font-size: 28px; font-weight: 600; margin: 8px 0; }
+        .typography-demo h2 { font-size: 24px; font-weight: 600; margin: 8px 0; }
+        .typography-demo h3 { font-size: 18px; font-weight: 600; margin: 8px 0; }
+        .typography-demo h4 { font-size: 16px; font-weight: 600; margin: 8px 0; }
+        .typography-demo h5 { font-size: 14px; font-weight: 600; margin: 8px 0; }
+        .typography-demo h6 { font-size: 13px; font-weight: 600; margin: 8px 0; }
+        .typography-demo p { font-size: 14px; font-weight: 500; margin: 8px 0; }
+        .typography-demo .small { font-size: 13px; font-weight: 500; color: var(--text-muted); margin: 8px 0; }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .color-card {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .color-swatch {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            margin-right: 16px;
+            border: 1px solid #ccc;
+        }
+
+        .color-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .color-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--primary-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #4285d1;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            border-top: 1px solid #e0e0e0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 UKO Design System</h1>
+            <p>기존 UKO 대시보드에서 추출한 일관된 UI 컴포넌트 라이브러리</p>
+        </div>
+
+        <div class="section">
+            <h2>📊 프로젝트 통계</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">17</div>
+                    <div class="stat-label">UI 컴포넌트</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">스토리북 스토리</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">166</div>
+                    <div class="stat-label">아이콘 컴포넌트</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">40+</div>
+                    <div class="stat-label">사용 시나리오</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 주요 기능</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>컴포넌트 라이브러리</h3>
+                    <p>Typography, Form Controls, UI Components 등 재사용 가능한 컴포넌트들</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>디자인 토큰</h3>
+                    <p>Figma에서 추출한 일관된 컬러, 타이포그래피 시스템</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>인터랙티브 문서</h3>
+                    <p>Storybook을 통한 실시간 컴포넌트 테스트 및 문서화</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>커스터마이징</h3>
+                    <p>Material-UI 테마 시스템 기반의 유연한 스타일링</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🖋 타이포그래피 시스템</h2>
+            <div class="typography-demo">
+                <h1>Heading 1 - 28px Bold</h1>
+                <h2>Heading 2 - 24px Bold</h2>
+                <h3>Heading 3 - 18px Bold</h3>
+                <h4>Heading 4 - 16px Bold</h4>
+                <h5>Heading 5 - 14px Bold</h5>
+                <h6>Heading 6 - 13px Bold</h6>
+                <p>Body text - 14px Medium. 이것은 본문 텍스트 예제입니다.</p>
+                <div class="small">Small text - 13px Medium. 작은 텍스트나 부가 정보에 사용됩니다.</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎨 컬러 팔레트</h2>
+            <div class="color-palette">
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: #5896e1;"></div>
+                    <div class="color-info">
+                        <h4>Primary Blue</h4>
+                        <p>#5896e1</p>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: #a0d4ff;"></div>
+                    <div class="color-info">
+                        <h4>Primary Light</h4>
+                        <p>#a0d4ff</p>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: #1f2738;"></div>
+                    <div class="color-info">
+                        <h4>Text Main</h4>
+                        <p>#1f2738</p>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: #94a4c4;"></div>
+                    <div class="color-info">
+                        <h4>Text Muted</h4>
+                        <p>#94a4c4</p>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: #f9f9f9;"></div>
+                    <div class="color-info">
+                        <h4>Background</h4>
+                        <p>#f9f9f9</p>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background-color: #ffffff; border: 2px solid #ddd;"></div>
+                    <div class="color-info">
+                        <h4>White</h4>
+                        <p>#ffffff</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 포함된 컴포넌트</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div>
+                    <h3>📝 Typography</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>• H1-H6 헤딩 컴포넌트</li>
+                        <li>• Paragraph 본문 텍스트</li>
+                        <li>• Small/Tiny 작은 텍스트</li>
+                        <li>• Span 인라인 텍스트</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>📝 Form Controls</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>• AppCheckBox 체크박스</li>
+                        <li>• AppRadio 라디오 버튼</li>
+                        <li>• AppSelect 셀렉트 박스</li>
+                        <li>• 다양한 크기 및 상태</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>🧩 UI Components</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>• AppModal 모달 다이얼로그</li>
+                        <li>• AppPagination 페이지네이션</li>
+                        <li>• IconWrapper 아이콘 래퍼</li>
+                        <li>• LoadingScreen 로딩 화면</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>🎨 Design System</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>• 컬러 토큰 시각화</li>
+                        <li>• 타이포그래피 시스템</li>
+                        <li>• Figma 연동 토큰</li>
+                        <li>• MUI 테마 통합</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 기술 스택</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
+                <span style="background: #61dafb; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">React 18</span>
+                <span style="background: #ff4785; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">Storybook 8</span>
+                <span style="background: #007fff; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">Material-UI 5</span>
+                <span style="background: #db7093; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">Emotion</span>
+                <span style="background: #646cff; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">Vite</span>
+                <span style="background: #f05032; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 500;">Figma Tokens</span>
+            </div>
+        </div>
+
+        <div class="section" style="text-align: center;">
+            <h2>📥 시작하기</h2>
+            <p style="margin-bottom: 24px;">UKO Design System을 프로젝트에 적용하고 싶으시다면:</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://github.com/syseo0107/uko-design-system-storybook" class="btn">GitHub Repository</a>
+                <a href="#" class="btn" style="background: #6f42c1;">스토리북 데모 (준비중)</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 UKO Design System. 일관되고 재사용 가능한 UI 컴포넌트로 더 나은 사용자 경험을 만들어갑니다.</p>
+    </div>
+</body>
+</html>
