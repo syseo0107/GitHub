@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "UKO Design System Storybook - Component library extracted from UKO Dashboard",
   "scripts": {
-    "dev": "storybook dev -p 6006",
+    "dev": "storybook dev -p 3001 --host 0.0.0.0 --disable-telemetry",
     "build": "storybook build",
     "preview": "storybook dev",
     "build-storybook": "storybook build"

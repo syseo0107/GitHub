@@ -1,3 +1,4 @@
+import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -70,11 +71,11 @@ const preview = {
     },
   },
   decorators: [
-    (Story) => (
-      <ThemeProvider theme={ukoTheme}>
-        <CssBaseline />
-        <Story />
-      </ThemeProvider>
+    (Story) => React.createElement(
+      ThemeProvider,
+      { theme: ukoTheme },
+      React.createElement(CssBaseline, null),
+      React.createElement(Story, null)
     ),
   ],
 };

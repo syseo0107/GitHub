@@ -1,0 +1,118 @@
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 8080 --host 0.0.0.0 --disable-telemetry -p 8081
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+WebSocket server error: Port is already in use
+╭─────────────────────────────────────────────────────────────────────╮
+│                                                                     │
+│   [38;2;162;224;94mStorybook 8.6.14 for react-vite started[39m                           │
+│   1.32 s for manager and 1.37 s for preview                         │
+│                                                                     │
+│   Local:            http://localhost:8081/                          │
+│   On your network:  http://0.0.0.0:8081/                            │
+│                                                                     │
+│   [38;2;243;173;56mA new version (9.1.6) is available![39m                               │
+│                                                                     │
+│   Upgrade now: [38;2;162;224;94mnpx storybook@latest upgrade[39m                         │
+│                                                                     │
+│   Read full changelog:                                              │
+│   https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│                                                                     │
+╰─────────────────────────────────────────────────────────────────────╯
+Error:   Failed to scan for dependencies from entries:
+  /home/user/webapp/uko-storybook/src/stories/AppCheckBox.stories.js
+/home/user/webapp/uko-storybook/src/stories/AppModal.stories.js
+/home/user/webapp/uko-storybook/src/stories/AppPagination.stories.js
+/home/user/webapp/uko-storybook/src/stories/AppRadio.stories.js
+/home/user/webapp/uko-storybook/src/stories/AppSelect.stories.js
+/home/user/webapp/uko-storybook/src/stories/DesignTokens.stories.js
+/home/user/webapp/uko-storybook/src/stories/IconWrapper.stories.js
+/home/user/webapp/uko-storybook/src/stories/Typography.stories.js
+
+  [31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/AppCheckBox.stories.js:34:6:
+[37m      34 │       [32m<[37mAppCheckBox
+         ╵       [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/AppModal.stories.js:25:6:
+[37m      25 │       [32m<[37m>
+         ╵       [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/AppPagination.stories.js:41:6:
+[37m      41 │       [32m<[37mAppPagination
+         ╵       [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/AppRadio.stories.js:38:6:
+[37m      38 │       [32m<[37mAppRadio
+         ╵       [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/AppSelect.stories.js:32:6:
+[37m      32 │       [32m<[37mFormControl sx={{ minWidth: 200 }}>
+         ╵       [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/DesignTokens.stories.js:18:2:
+[37m      18 │   [32m<[37mdiv style={{ 
+         ╵   [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/IconWrapper.stories.js:31:4:
+[37m      31 │     [32m<[37mIconWrapper>
+         ╵     [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mThe JSX syntax extension is not currently enabled[0m
+
+    src/stories/Typography.stories.js:30:20:
+[37m      30 │   render: (args) => [32m<[37mH1 {...args} />,
+         ╵                     [32m^[0m
+
+  The esbuild loader for this file is currently set to "js" but it must be set to "jsx" to be able to parse JSX syntax. You can use "loader: { '.js': 'jsx' }" to do that.
+
+
+    at failureErrorWithLog (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:945:25
+    at runOnEndCallbacks (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:1315:45)
+    at buildResponseToResult (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:943:7)
+    at /home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:955:9
+    at new Promise (<anonymous>)
+    at requestCallbacks.on-end (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:954:54)
+    at handleRequest (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:647:17)
+    at handleIncomingPacket (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:672:7)
+    at Socket.readFromStdout (/home/user/webapp/uko-storybook/node_modules/vite/node_modules/esbuild/lib/main.js:600:7)

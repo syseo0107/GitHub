@@ -10,7 +10,8 @@ module.exports = {
     max_memory_restart: '1G',
     env: {
       NODE_ENV: 'development',
-      PORT: 6006
+      PORT: 6006,
+      STORYBOOK_DISABLE_TELEMETRY: '1'
     }
   }]
 };

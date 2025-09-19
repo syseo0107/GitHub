@@ -1,0 +1,175 @@
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6006 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+╭─────────────────────────────────────────────────────────────────────╮
+│                                                                     │
+│   [38;2;162;224;94mStorybook 8.6.14 for react-vite started[39m                           │
+│   1.14 s for manager and 998 ms for preview                         │
+│                                                                     │
+│   Local:            http://localhost:6006/                          │
+│   On your network:  http://0.0.0.0:6006/                            │
+│                                                                     │
+│   [38;2;243;173;56mA new version (9.1.6) is available![39m                               │
+│                                                                     │
+│   Upgrade now: [38;2;162;224;94mnpx storybook@latest upgrade[39m                         │
+│                                                                     │
+│   Read full changelog:                                              │
+│   https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│                                                                     │
+╰─────────────────────────────────────────────────────────────────────╯
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6006 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+[?25l[2K[1G[36m?[39m [1mPort 6006 is not available. Would you like to run Storybook on port 6007 instead?[22m [90m›[39m [90m(Y/n)[39m
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6007 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+[38;2;241;97;97mError: listen EADDRINUSE: address already in use 0.0.0.0:6007[39m
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+WARN Broken build, fix the error above.
+WARN You may need to refresh the browser.
+
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6007 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+[38;2;241;97;97mError: listen EADDRINUSE: address already in use 0.0.0.0:6007[39m
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+WARN Broken build, fix the error above.
+WARN You may need to refresh the browser.
+
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6007 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+[38;2;241;97;97mError: listen EADDRINUSE: address already in use 0.0.0.0:6007[39m
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+WARN Broken build, fix the error above.
+WARN You may need to refresh the browser.
+
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6007 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+[38;2;241;97;97mError: listen EADDRINUSE: address already in use 0.0.0.0:6007[39m
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+WARN Broken build, fix the error above.
+WARN You may need to refresh the browser.
+
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 6007 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+[38;2;241;97;97mError: listen EADDRINUSE: address already in use 0.0.0.0:6007[39m
+    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
+    at listenInCluster (node:net:1965:12)
+    at doListen (node:net:2139:7)
+    at process.processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+WARN Broken build, fix the error above.
+WARN You may need to refresh the browser.
+
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 8080 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+╭─────────────────────────────────────────────────────────────────────╮
+│                                                                     │
+│   [38;2;162;224;94mStorybook 8.6.14 for react-vite started[39m                           │
+│   1.88 s for manager and 1.34 s for preview                         │
+│                                                                     │
+│   Local:            http://localhost:8080/                          │
+│   On your network:  http://0.0.0.0:8080/                            │
+│                                                                     │
+│   [38;2;243;173;56mA new version (9.1.6) is available![39m                               │
+│                                                                     │
+│   Upgrade now: [38;2;162;224;94mnpx storybook@latest upgrade[39m                         │
+│                                                                     │
+│   Read full changelog:                                              │
+│   https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│                                                                     │
+╰─────────────────────────────────────────────────────────────────────╯
+
+> uko-storybook@1.0.0 dev
+> storybook dev -p 8080 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+[?25l[2K[1G[36m?[39m [1mPort 8080 is not available. Would you like to run Storybook on port 8081 instead?[22m [90m›[39m [90m(Y/n)[39m
+> uko-storybook@1.0.0 dev
+> storybook dev -p 8081 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+[?25l[2K[1G[36m?[39m [1mPort 8081 is not available. Would you like to run Storybook on port 8082 instead?[22m [90m›[39m [90m(Y/n)[39m
+> uko-storybook@1.0.0 dev
+> storybook dev -p 3001 --host 0.0.0.0 --disable-telemetry
+
+@storybook/core v8.6.14
+
+info => Starting manager..
+info => Starting preview..
+╭─────────────────────────────────────────────────────────────────────╮
+│                                                                     │
+│   [38;2;162;224;94mStorybook 8.6.14 for react-vite started[39m                           │
+│   1.18 s for manager and 1.03 s for preview                         │
+│                                                                     │
+│   Local:            http://localhost:3001/                          │
+│   On your network:  http://0.0.0.0:3001/                            │
+│                                                                     │
+│   [38;2;243;173;56mA new version (9.1.6) is available![39m                               │
+│                                                                     │
+│   Upgrade now: [38;2;162;224;94mnpx storybook@latest upgrade[39m                         │
+│                                                                     │
+│   Read full changelog:                                              │
+│   https://github.com/storybookjs/storybook/blob/main/CHANGELOG.md   │
+│                                                                     │
+╰─────────────────────────────────────────────────────────────────────╯

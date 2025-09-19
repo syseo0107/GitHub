@@ -60,7 +60,7 @@ export const Disabled = {
   ),
 };
 
-export const RadioGroup = {
+export const RadioGroupExample = {
   render: () => {
     const [value, setValue] = useState('option1');
 
@@ -98,7 +98,7 @@ export const RadioGroup = {
   },
 };
 
-export const HorizontalGroup = {
+export const HorizontalRadioGroup = {
   render: () => {
     const [value, setValue] = useState('yes');
 

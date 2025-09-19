@@ -1,0 +1,44 @@
+2025-09-19 04:33:29,657 INFO Set uid to user 1000 succeeded
+2025-09-19 04:33:29,662 INFO RPC interface 'supervisor' initialized
+2025-09-19 04:33:29,662 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+2025-09-19 04:33:29,664 INFO daemonizing the supervisord process
+2025-09-19 04:33:29,665 INFO supervisord started with pid 5242
+2025-09-19 04:33:30,669 INFO spawned: 'storybook' with pid 5244
+2025-09-19 04:33:31,809 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:34:18,766 INFO waiting for storybook to stop
+2025-09-19 04:34:18,771 WARN stopped: storybook (terminated by SIGTERM)
+2025-09-19 04:34:18,781 INFO spawned: 'storybook' with pid 5765
+2025-09-19 04:34:19,820 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:34:39,272 INFO waiting for storybook to stop
+2025-09-19 04:34:39,276 WARN stopped: storybook (terminated by SIGTERM)
+2025-09-19 04:35:02,962 INFO spawned: 'storybook' with pid 6050
+2025-09-19 04:35:04,152 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:35:09,209 WARN exited: storybook (exit status 1; not expected)
+2025-09-19 04:35:09,211 INFO spawned: 'storybook' with pid 6267
+2025-09-19 04:35:10,288 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:35:13,371 WARN exited: storybook (exit status 1; not expected)
+2025-09-19 04:35:14,373 INFO spawned: 'storybook' with pid 6375
+2025-09-19 04:35:16,366 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:35:18,175 WARN exited: storybook (exit status 1; not expected)
+2025-09-19 04:35:19,179 INFO spawned: 'storybook' with pid 6437
+2025-09-19 04:35:20,294 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:35:23,400 WARN exited: storybook (exit status 1; not expected)
+2025-09-19 04:35:24,403 INFO spawned: 'storybook' with pid 6501
+2025-09-19 04:35:25,403 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:35:29,827 WARN exited: storybook (exit status 1; not expected)
+2025-09-19 04:35:30,830 INFO spawned: 'storybook' with pid 6654
+2025-09-19 04:35:31,855 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:35:46,220 INFO waiting for storybook to stop
+2025-09-19 04:35:46,225 WARN stopped: storybook (terminated by SIGTERM)
+2025-09-19 04:35:46,229 INFO spawned: 'storybook' with pid 7165
+2025-09-19 04:35:47,435 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:36:05,615 INFO waiting for storybook to stop
+2025-09-19 04:36:05,631 WARN stopped: storybook (terminated by SIGTERM)
+2025-09-19 04:38:20,230 INFO spawned: 'storybook' with pid 7716
+2025-09-19 04:38:21,632 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:38:43,888 INFO waiting for storybook to stop
+2025-09-19 04:38:43,918 WARN stopped: storybook (terminated by SIGTERM)
+2025-09-19 04:38:56,561 INFO spawned: 'storybook' with pid 8156
+2025-09-19 04:38:57,863 INFO success: storybook entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-19 04:39:43,849 INFO waiting for storybook to stop
+2025-09-19 04:39:43,854 WARN stopped: storybook (terminated by SIGTERM)
