@@ -39,9 +39,16 @@
 
 ## 🚀 시작하기
 
+### 🌐 온라인 데모
+**GitHub Pages**: [https://syseo0107.github.io/uko-design-system-storybook/](https://syseo0107.github.io/uko-design-system-storybook/)
+
 ### 설치
 
 ```bash
+# 저장소 복제
+git clone https://github.com/syseo0107/uko-design-system-storybook.git
+cd uko-design-system-storybook
+
 # 의존성 설치
 npm install
 
