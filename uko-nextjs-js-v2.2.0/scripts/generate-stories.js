@@ -1,408 +1,487 @@
 #!/usr/bin/env node
 
+/**
+ * Automatic Storybook Story Generation Script
+ * This script scans the components directory and generates stories automatically
+ */
+
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
-// 컴포넌트를 분석하고 Storybook 스토리를 자동 생성하는 스크립트
-
+// Configuration
 const COMPONENTS_DIR = path.join(__dirname, '../src/components');
 const STORIES_DIR = path.join(__dirname, '../stories');
+const PAGES_DIR = path.join(__dirname, '../src/page-sections');
 
-// 컴포넌트 타입별 카테고리 매핑
-const COMPONENT_CATEGORIES = {
-  'AppCheckBox': 'Form',
-  'AppRadio': 'Form', 
-  'AppSelect': 'Form',
-  'AppPagination': 'Navigation',
-  'AppModal': 'Feedback',
-  'AppAvatar': 'Data Display',
-  'AvatarBadge': 'Data Display',
-  'FlexBox': 'Layout',
-  'FlexBetween': 'Layout',
-  'FlexRowAlign': 'Layout',
-  'Typography': 'Data Display',
-  'IconWrapper': 'Utils',
-  'LoadingScreen': 'Feedback',
-  'MoreOptions': 'Utils',
-  'ScrollBar': 'Utils',
-  'ColorRadio': 'Form',
-  'RoundCheckBox': 'Form'
-};
-
-// 공통 props 타입별 argTypes 정의
-const COMMON_ARG_TYPES = {
-  onClick: {
-    action: 'clicked',
-    description: '클릭 이벤트 핸들러'
-  },
-  onChange: {
-    action: 'changed',
-    description: '변경 이벤트 핸들러'
-  },
-  disabled: {
-    control: 'boolean',
-    description: '비활성화 상태'
-  },
-  size: {
-    control: { type: 'select' },
-    options: ['small', 'medium', 'large'],
-    description: '컴포넌트 크기'
-  },
-  variant: {
-    control: { type: 'select' },
-    options: ['outlined', 'contained', 'text'],
-    description: '컴포넌트 변형'
-  },
-  color: {
-    control: { type: 'select' },
-    options: ['primary', 'secondary', 'default', 'error', 'warning', 'info', 'success'],
-    description: '색상 테마'
-  },
-  children: {
-    control: 'text',
-    description: '자식 컴포넌트 또는 텍스트'
-  }
-};
-
-// 파일에서 export default된 컴포넌트명 추출
-function extractComponentName(filePath) {
-  try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    
-    // export default ComponentName 패턴 찾기
-    const defaultExportMatch = content.match(/export\s+default\s+(\w+)/);
-    if (defaultExportMatch) {
-      return defaultExportMatch[1];
-    }
-    
-    // const ComponentName = () => {}; export default ComponentName; 패턴 찾기
-    const constExportMatch = content.match(/const\s+(\w+)\s*=.*?export\s+default\s+\1/s);
-    if (constExportMatch) {
-      return constExportMatch[1];
-    }
-    
-    // 파일명에서 추출 (fallback)
-    return path.basename(filePath, path.extname(filePath));
-  } catch (error) {
-    console.error(`Error reading file ${filePath}:`, error);
-    return null;
-  }
-}
-
-// 컴포넌트 파일에서 props 분석
-function analyzeComponentProps(filePath) {
-  try {
-    const content = fs.readFileSync(filePath, 'utf8');
-    const props = [];
-    
-    // Props destructuring 패턴 찾기
-    const destructuringMatches = content.match(/{\s*([^}]+)\s*}/g);
-    if (destructuringMatches) {
-      destructuringMatches.forEach(match => {
-        const propsText = match.replace(/[{}]/g, '').trim();
-        const propNames = propsText.split(',').map(prop => 
-          prop.trim().split('=')[0].split(':')[0].trim()
-        ).filter(prop => prop && !prop.includes('...'));
-        
-        props.push(...propNames);
-      });
-    }
-    
-    // children prop 확인
-    if (content.includes('{children}') || content.includes('props.children')) {
-      props.push('children');
-    }
-    
-    return [...new Set(props)];
-  } catch (error) {
-    console.error(`Error analyzing props for ${filePath}:`, error);
-    return [];
-  }
-}
-
-// argTypes 생성
-function generateArgTypes(props) {
-  const argTypes = {};
+// Template for generating stories
+const storyTemplate = (componentName, componentPath, hasProps = true) => {
+  const relativeImportPath = componentPath.replace(/^.*\/src\//, '../src/');
   
-  props.forEach(prop => {
-    if (COMMON_ARG_TYPES[prop]) {
-      argTypes[prop] = COMMON_ARG_TYPES[prop];
-    } else {
-      // 기본 타입 추론
-      if (prop.toLowerCase().includes('text') || prop.toLowerCase().includes('title') || prop.toLowerCase().includes('label')) {
-        argTypes[prop] = {
-          control: 'text',
-          description: `${prop} 속성`
-        };
-      } else if (prop.toLowerCase().includes('show') || prop.toLowerCase().includes('open') || prop.toLowerCase().includes('visible')) {
-        argTypes[prop] = {
-          control: 'boolean',
-          description: `${prop} 상태`
-        };
-      } else {
-        argTypes[prop] = {
-          control: 'text',
-          description: `${prop} 속성`
-        };
-      }
-    }
-  });
-  
-  return argTypes;
-}
-
-// 스토리 템플릿 생성
-function generateStoryContent(componentName, componentPath, category, props) {
-  const relativePath = path.relative(STORIES_DIR, componentPath).replace(/\\/g, '/');
-  const argTypes = generateArgTypes(props);
-  
-  return `import ${componentName} from '${relativePath}';
-import { action } from '@storybook/addon-actions';
+  return `import React from 'react';
+import ${componentName} from '${relativeImportPath}';
 
 export default {
-  title: 'Components/${category}/${componentName}',
+  title: 'Components/${componentName}',
   component: ${componentName},
   parameters: {
     layout: 'centered',
     docs: {
       description: {
-        component: '${componentName} 컴포넌트입니다. UKO 디자인 시스템의 일부입니다.',
+        component: '${componentName} component from UKO Dashboard',
       },
     },
   },
-  tags: ['autodocs'],
-  argTypes: ${JSON.stringify(argTypes, null, 4)},
+  argTypes: {
+    ${hasProps ? `// Add your prop controls here
+    children: {
+      control: 'text',
+      description: 'Content to be rendered inside the component',
+    },` : ''}
+  },
 };
 
+// Default story
 export const Default = {
   args: {
-    ${props.includes('children') ? `children: '${componentName} Content',` : ''}
-    ${props.includes('onClick') ? 'onClick: action(\'onClick\'),' : ''}
-    ${props.includes('onChange') ? 'onChange: action(\'onChange\'),' : ''}
+    ${hasProps ? `children: '${componentName} Content',` : ''}
   },
 };
 
-${props.includes('disabled') ? `
-export const Disabled = {
+// Playground story for experimentation
+export const Playground = {
   args: {
-    ${props.includes('children') ? `children: '${componentName} Content',` : ''}
-    disabled: true,
-    ${props.includes('onClick') ? 'onClick: action(\'onClick\'),' : ''}
-    ${props.includes('onChange') ? 'onChange: action(\'onChange\'),' : ''}
+    ${hasProps ? `children: '${componentName} Playground',` : ''}
   },
-};` : ''}
-
-${props.includes('size') ? `
-export const Sizes = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <${componentName} size="small" ${props.includes('children') ? 'children="Small"' : ''} />
-      <${componentName} size="medium" ${props.includes('children') ? 'children="Medium"' : ''} />
-      <${componentName} size="large" ${props.includes('children') ? 'children="Large"' : ''} />
-    </div>
-  ),
-};` : ''}
-
-${props.includes('variant') ? `
-export const Variants = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <${componentName} variant="outlined" ${props.includes('children') ? 'children="Outlined"' : ''} />
-      <${componentName} variant="contained" ${props.includes('children') ? 'children="Contained"' : ''} />
-      <${componentName} variant="text" ${props.includes('children') ? 'children="Text"' : ''} />
-    </div>
-  ),
-};` : ''}
+};
 `;
-}
+};
 
-// 컴포넌트 디렉터리 순회
-function findComponentFiles(dir, files = []) {
-  const items = fs.readdirSync(dir);
+// Template for color palette story
+const colorPaletteStory = () => `import React from 'react';
+import { Box, Typography, Paper, Grid } from '@mui/material';
+import colors from '../stories/tokens/colors.json';
+
+export default {
+  title: 'Design System/Colors',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Color palette from Figma design tokens',
+      },
+    },
+  },
+};
+
+const ColorCard = ({ name, value, category }) => (
+  <Paper elevation={1} sx={{ p: 2, height: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        height: 80,
+        backgroundColor: value,
+        border: '1px solid #e0e0e0',
+        borderRadius: 1,
+        mb: 2,
+      }}
+    />
+    <Typography variant="subtitle2" gutterBottom>
+      {category} / {name}
+    </Typography>
+    <Typography variant="caption" color="text.secondary" sx={{ fontFamily: 'monospace' }}>
+      {value}
+    </Typography>
+  </Paper>
+);
+
+export const Palette = () => {
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Color Palette
+      </Typography>
+      
+      {Object.entries(colors).map(([category, categoryColors]) => (
+        <Box key={category} sx={{ mb: 4 }}>
+          <Typography variant="h6" gutterBottom sx={{ textTransform: 'capitalize', mt: 3 }}>
+            {category}
+          </Typography>
+          <Grid container spacing={2}>
+            {typeof categoryColors === 'object' && categoryColors !== null ? (
+              Object.entries(categoryColors).map(([name, value]) => (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={name}>
+                  <ColorCard name={name} value={value} category={category} />
+                </Grid>
+              ))
+            ) : (
+              <Grid item xs={12} sm={6} md={4} lg={3}>
+                <ColorCard name={category} value={categoryColors} category="Base" />
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+`;
+
+// Template for typography story
+const typographyStory = () => `import React from 'react';
+import { Box, Typography, Paper } from '@mui/material';
+import typography from '../stories/tokens/typography.json';
+
+export default {
+  title: 'Design System/Typography',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Typography styles from Figma design tokens',
+      },
+    },
+  },
+};
+
+const TypographyDemo = ({ variant, config }) => {
+  const text = \`\${variant.charAt(0).toUpperCase() + variant.slice(1)} Typography\`;
   
-  items.forEach(item => {
-    const fullPath = path.join(dir, item);
-    const stat = fs.statSync(fullPath);
+  return (
+    <Paper elevation={1} sx={{ p: 3, mb: 2 }}>
+      <Typography variant={variant} gutterBottom>
+        {text}
+      </Typography>
+      <Box sx={{ mt: 1 }}>
+        <Typography variant="caption" color="text.secondary">
+          Font Size: {config.fontSize || 'inherit'} | 
+          Font Weight: {config.fontWeight || 'normal'} | 
+          Line Height: {config.lineHeight || 'normal'}
+        </Typography>
+      </Box>
+    </Paper>
+  );
+};
+
+export const TypographyScale = () => {
+  const variants = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2', 'button', 'caption'];
+  
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Typography Scale
+      </Typography>
+      <Typography variant="body1" paragraph color="text.secondary">
+        Typography system based on design tokens
+      </Typography>
+      
+      {variants.map((variant) => (
+        typography[variant] && (
+          <TypographyDemo 
+            key={variant} 
+            variant={variant} 
+            config={typography[variant]}
+          />
+        )
+      ))}
+    </Box>
+  );
+};
+`;
+
+// Template for spacing story
+const spacingStory = () => `import React from 'react';
+import { Box, Typography, Paper } from '@mui/material';
+import spacing from '../stories/tokens/spacing.json';
+
+export default {
+  title: 'Design System/Spacing',
+  parameters: {
+    docs: {
+      description: {
+        component: 'Spacing system from design tokens',
+      },
+    },
+  },
+};
+
+export const SpacingScale = () => {
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        Spacing Scale
+      </Typography>
+      <Typography variant="body1" paragraph color="text.secondary">
+        Consistent spacing values used throughout the design system
+      </Typography>
+      
+      {spacing.values.map((value, index) => (
+        <Paper key={index} elevation={1} sx={{ p: 2, mb: 2, display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ minWidth: 60 }}>
+            <Typography variant="subtitle2">
+              spacing[{index}]
+            </Typography>
+          </Box>
+          <Box sx={{ mx: 3, minWidth: 60 }}>
+            <Typography variant="caption" color="text.secondary">
+              {value}px
+            </Typography>
+          </Box>
+          <Box 
+            sx={{ 
+              width: value, 
+              height: 24, 
+              backgroundColor: 'primary.main',
+              borderRadius: 1,
+            }} 
+          />
+        </Paper>
+      ))}
+    </Box>
+  );
+};
+`;
+
+// Helper function to find all component files
+function findComponentFiles(dir, fileList = []) {
+  if (!fs.existsSync(dir)) {
+    return fileList;
+  }
+
+  const files = fs.readdirSync(dir);
+  
+  files.forEach((file) => {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
     
     if (stat.isDirectory()) {
-      findComponentFiles(fullPath, files);
-    } else if (item.endsWith('.jsx') || item.endsWith('.js')) {
-      // getLayout.jsx 같은 유틸리티 파일 제외
-      if (!item.toLowerCase().includes('layout') && !item.startsWith('.')) {
-        files.push(fullPath);
+      // Recursively search subdirectories
+      findComponentFiles(filePath, fileList);
+    } else if (file.endsWith('.jsx') || file.endsWith('.js')) {
+      // Only include component files (not index files or utils)
+      if (!file.includes('index') && !file.includes('utils') && !file.includes('config')) {
+        fileList.push({
+          name: file.replace(/\.(jsx|js)$/, ''),
+          path: filePath,
+          dir: path.relative(COMPONENTS_DIR, dir),
+        });
       }
     }
   });
   
-  return files;
+  return fileList;
 }
 
-// 메인 함수
-function generateAllStories() {
-  console.log('🎨 UKO Storybook 스토리 자동 생성을 시작합니다...');
-  
-  // stories 디렉터리 생성
-  if (!fs.existsSync(STORIES_DIR)) {
-    fs.mkdirSync(STORIES_DIR, { recursive: true });
-  }
-  
-  const componentFiles = findComponentFiles(COMPONENTS_DIR);
-  let generatedCount = 0;
-  
-  componentFiles.forEach(filePath => {
-    const componentName = extractComponentName(filePath);
-    if (!componentName) {
-      console.warn(`⚠️  컴포넌트명을 추출할 수 없습니다: ${filePath}`);
-      return;
+// Helper function to generate story filename
+function getStoryFilename(componentName) {
+  return `${componentName}.stories.jsx`;
+}
+
+// Main function to generate stories
+async function generateStories() {
+  try {
+    console.log('📚 Starting automatic story generation...');
+
+    // Ensure stories directory exists
+    if (!fs.existsSync(STORIES_DIR)) {
+      fs.mkdirSync(STORIES_DIR, { recursive: true });
     }
-    
-    const category = COMPONENT_CATEGORIES[componentName] || 'Others';
-    const props = analyzeComponentProps(filePath);
-    
-    const storyContent = generateStoryContent(componentName, filePath, category, props);
-    const storyFileName = `${componentName}.stories.js`;
-    const storyFilePath = path.join(STORIES_DIR, storyFileName);
-    
-    // 이미 존재하는 스토리는 덮어쓰지 않음
-    if (fs.existsSync(storyFilePath)) {
-      console.log(`⏭️  스킵: ${storyFileName} (이미 존재)`);
-      return;
-    }
-    
-    try {
-      fs.writeFileSync(storyFilePath, storyContent);
-      console.log(`✅ 생성: ${storyFileName}`);
-      generatedCount++;
-    } catch (error) {
-      console.error(`❌ 실패: ${storyFileName}`, error);
-    }
-  });
-  
-  console.log(`\n🎉 총 ${generatedCount}개의 스토리가 생성되었습니다!`);
-  
-  // 인덱스 스토리 생성
-  generateIndexStory();
-}
 
-// 인덱스 스토리 생성 (디자인 시스템 개요)
-function generateIndexStory() {
-  const indexContent = `import { Meta } from '@storybook/blocks';
-import { designTokens } from '../src/design-tokens';
+    // Generate design system stories
+    console.log('🎨 Generating design system stories...');
 
-<Meta title="디자인 시스템/소개" />
+    // Color palette story
+    fs.writeFileSync(
+      path.join(STORIES_DIR, 'Colors.stories.jsx'),
+      colorPaletteStory()
+    );
+    console.log('✅ Color palette story generated');
 
-# UKO 디자인 시스템
+    // Typography story
+    fs.writeFileSync(
+      path.join(STORIES_DIR, 'Typography.stories.jsx'),
+      typographyStory()
+    );
+    console.log('✅ Typography story generated');
 
-UKO는 현대적이고 일관된 사용자 경험을 제공하는 디자인 시스템입니다.
+    // Spacing story
+    fs.writeFileSync(
+      path.join(STORIES_DIR, 'Spacing.stories.jsx'),
+      spacingStory()
+    );
+    console.log('✅ Spacing story generated');
 
-## 🎨 색상 팔레트
+    // Find all component files
+    const componentFiles = findComponentFiles(COMPONENTS_DIR);
+    console.log(`📦 Found ${componentFiles.length} components`);
 
-### Primary Colors
-<div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-  {Object.entries(designTokens.colors.primary).map(([name, color]) => (
-    <div key={name} style={{ textAlign: 'center' }}>
-      <div style={{ 
-        width: 80, 
-        height: 80, 
-        backgroundColor: color, 
-        borderRadius: 8,
-        border: '1px solid #e0e0e0'
-      }} />
-      <div style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>{name}</div>
-      <div style={{ fontSize: '0.75rem', color: '#666' }}>{color}</div>
-    </div>
-  ))}
-</div>
+    // Generate stories for each component
+    let generatedCount = 0;
+    componentFiles.forEach((component) => {
+      const storyPath = path.join(STORIES_DIR, getStoryFilename(component.name));
+      
+      // Skip if story already exists
+      if (!fs.existsSync(storyPath)) {
+        const storyContent = storyTemplate(
+          component.name,
+          component.path.replace(/\\/g, '/'), // Ensure forward slashes for imports
+          true
+        );
+        
+        fs.writeFileSync(storyPath, storyContent);
+        generatedCount++;
+        console.log(`✅ Generated story for ${component.name}`);
+      } else {
+        console.log(`⏭️  Story already exists for ${component.name}`);
+      }
+    });
 
-### Text Colors
-<div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-  {Object.entries(designTokens.colors.text).map(([name, color]) => (
-    <div key={name} style={{ textAlign: 'center' }}>
-      <div style={{ 
-        width: 80, 
-        height: 80, 
-        backgroundColor: color, 
-        borderRadius: 8,
-        border: '1px solid #e0e0e0'
-      }} />
-      <div style={{ fontSize: '0.875rem', marginTop: '0.5rem' }}>{name}</div>
-      <div style={{ fontSize: '0.75rem', color: '#666' }}>{color}</div>
-    </div>
-  ))}
-</div>
+    // Create example stories for common patterns
+    const exampleStories = [
+      {
+        name: 'Button.stories.jsx',
+        content: `import React from 'react';
+import { Button } from '@mui/material';
 
-## 📝 Typography
-
-<div style={{ fontFamily: designTokens.typography.fontFamily }}>
-  <h1 style={{ fontSize: designTokens.typography.fontSize['4xl'] }}>Heading 1</h1>
-  <h2 style={{ fontSize: designTokens.typography.fontSize['3xl'] }}>Heading 2</h2>
-  <h3 style={{ fontSize: designTokens.typography.fontSize['2xl'] }}>Heading 3</h3>
-  <h4 style={{ fontSize: designTokens.typography.fontSize.xl }}>Heading 4</h4>
-  <h5 style={{ fontSize: designTokens.typography.fontSize.lg }}>Heading 5</h5>
-  <h6 style={{ fontSize: designTokens.typography.fontSize.base }}>Heading 6</h6>
-  <p style={{ fontSize: designTokens.typography.fontSize.base }}>Body Text - Lorem ipsum dolor sit amet</p>
-  <small style={{ fontSize: designTokens.typography.fontSize.sm }}>Small Text - Additional information</small>
-</div>
-
-## 📐 Spacing
-
-<div style={{ display: 'flex', gap: '1rem', alignItems: 'end', marginBottom: '2rem' }}>
-  {Object.entries(designTokens.spacing).map(([name, size]) => (
-    <div key={name} style={{ textAlign: 'center' }}>
-      <div style={{ 
-        width: size, 
-        height: size, 
-        backgroundColor: designTokens.colors.primary.blue300,
-        marginBottom: '0.5rem'
-      }} />
-      <div style={{ fontSize: '0.875rem' }}>{name}</div>
-      <div style={{ fontSize: '0.75rem', color: '#666' }}>{size}</div>
-    </div>
-  ))}
-</div>
-
-## 🔲 Border Radius
-
-<div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-  {Object.entries(designTokens.borderRadius).map(([name, radius]) => (
-    <div key={name} style={{ textAlign: 'center' }}>
-      <div style={{ 
-        width: 60, 
-        height: 60, 
-        backgroundColor: designTokens.colors.primary.blue200,
-        borderRadius: radius === 'full' ? '50%' : radius,
-        marginBottom: '0.5rem'
-      }} />
-      <div style={{ fontSize: '0.875rem' }}>{name}</div>
-      <div style={{ fontSize: '0.75rem', color: '#666' }}>{radius}</div>
-    </div>
-  ))}
-</div>
-
-## 📱 사용법
-
-각 컴포넌트는 UKO 디자인 토큰을 기반으로 제작되었습니다. 
-좌측 사이드바에서 원하는 컴포넌트를 선택하여 사용법과 예제를 확인하세요.
-
-## 🔧 커스터마이징
-
-디자인 토큰은 \`src/design-tokens/index.js\` 파일에서 수정할 수 있습니다.
-`;
-
-  const indexPath = path.join(STORIES_DIR, 'Introduction.stories.mdx');
-  fs.writeFileSync(indexPath, indexContent);
-  console.log('✅ 디자인 시스템 소개 페이지 생성 완료');
-}
-
-// 스크립트 실행
-if (require.main === module) {
-  generateAllStories();
-}
-
-module.exports = {
-  generateAllStories,
-  generateStoryContent,
-  analyzeComponentProps,
-  extractComponentName
+export default {
+  title: 'Components/Button',
+  component: Button,
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['text', 'outlined', 'contained'],
+    },
+    color: {
+      control: 'select',
+      options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'],
+    },
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large'],
+    },
+    disabled: {
+      control: 'boolean',
+    },
+  },
 };
+
+export const Default = {
+  args: {
+    children: 'Button',
+    variant: 'contained',
+    color: 'primary',
+  },
+};
+
+export const AllVariants = () => (
+  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+    <Button variant="text">Text</Button>
+    <Button variant="outlined">Outlined</Button>
+    <Button variant="contained">Contained</Button>
+  </div>
+);
+
+export const AllColors = () => (
+  <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+    <Button variant="contained" color="primary">Primary</Button>
+    <Button variant="contained" color="secondary">Secondary</Button>
+    <Button variant="contained" color="error">Error</Button>
+    <Button variant="contained" color="warning">Warning</Button>
+    <Button variant="contained" color="info">Info</Button>
+    <Button variant="contained" color="success">Success</Button>
+  </div>
+);
+
+export const AllSizes = () => (
+  <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+    <Button variant="contained" size="small">Small</Button>
+    <Button variant="contained" size="medium">Medium</Button>
+    <Button variant="contained" size="large">Large</Button>
+  </div>
+);
+`,
+      },
+      {
+        name: 'Card.stories.jsx',
+        content: `import React from 'react';
+import { Card, CardContent, CardActions, Typography, Button, CardMedia } from '@mui/material';
+
+export default {
+  title: 'Components/Card',
+  component: Card,
+  parameters: {
+    layout: 'centered',
+  },
+};
+
+export const Default = () => (
+  <Card sx={{ maxWidth: 345 }}>
+    <CardMedia
+      component="img"
+      height="140"
+      image="https://via.placeholder.com/345x140"
+      alt="placeholder"
+    />
+    <CardContent>
+      <Typography gutterBottom variant="h5" component="div">
+        Card Title
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        This is a sample card component with some content to demonstrate the design system.
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button size="small">Share</Button>
+      <Button size="small">Learn More</Button>
+    </CardActions>
+  </Card>
+);
+
+export const SimpleCard = () => (
+  <Card sx={{ minWidth: 275 }}>
+    <CardContent>
+      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        Word of the Day
+      </Typography>
+      <Typography variant="h5" component="div">
+        benevolent
+      </Typography>
+      <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        adjective
+      </Typography>
+      <Typography variant="body2">
+        well meaning and kindly.
+        <br />
+        {'"a benevolent smile"'}
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button size="small">Learn More</Button>
+    </CardActions>
+  </Card>
+);
+`,
+      },
+    ];
+
+    // Write example stories
+    exampleStories.forEach(({ name, content }) => {
+      const storyPath = path.join(STORIES_DIR, name);
+      if (!fs.existsSync(storyPath)) {
+        fs.writeFileSync(storyPath, content);
+        console.log(`✅ Generated example story: ${name}`);
+      }
+    });
+
+    console.log(`\n🎉 Story generation completed!`);
+    console.log(`📊 Generated ${generatedCount} new stories`);
+    console.log(`📁 Stories location: ${STORIES_DIR}`);
+    
+  } catch (error) {
+    console.error('❌ Error generating stories:', error);
+    process.exit(1);
+  }
+}
+
+// Run the generation
+generateStories();

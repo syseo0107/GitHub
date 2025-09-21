@@ -1,0 +1,36 @@
+{
+  "primary": {
+    "blue100": "#ebf4ff",
+    "blue200": "#bfe5ff",
+    "blue300": "#a0d4ff",
+    "light": "#88c3ff",
+    "blue400": "#88c3ff",
+    "main": "#5896e1",
+    "blue500": "#5896e1",
+    "dark": "#4683db",
+    "blue600": "#4683db",
+    "blue700": "#3061b7",
+    "blue800": "#1e4493",
+    "blue900": "#122e7a"
+  },
+  "secondary": {},
+  "error": {},
+  "warning": {},
+  "success": {},
+  "grey": {},
+  "text": {
+    "100": "#f9f9f9",
+    "200": "#eceff5",
+    "500": "#283252",
+    "primary": "#1f2738",
+    "textMain200": "#1f2738",
+    "secondary": "#94a4c4",
+    "textMuted400": "#94a4c4",
+    "outlineMain300": "#e5eaf2"
+  },
+  "background": {
+    "default": "#ffffff",
+    "paper": "#ffffff",
+    "secondary": "#f9f9f9"
+  }
+}
