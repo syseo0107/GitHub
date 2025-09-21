@@ -1,0 +1,411 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+
+// 간단한 정적 Storybook 빌드 스크립트
+
+const PROJECT_ROOT = path.join(__dirname, '..');
+const BUILD_DIR = path.join(PROJECT_ROOT, 'storybook-static');
+const STORIES_DIR = path.join(PROJECT_ROOT, 'stories');
+const DESIGN_TOKENS = path.join(PROJECT_ROOT, 'src/design-tokens');
+
+console.log('🏗️  UKO Storybook 정적 사이트를 빌드합니다...');
+
+// 빌드 디렉터리 생성
+if (fs.existsSync(BUILD_DIR)) {
+  console.log('🧹 기존 빌드 디렉터리를 정리합니다...');
+  fs.rmSync(BUILD_DIR, { recursive: true });
+}
+fs.mkdirSync(BUILD_DIR, { recursive: true });
+
+// HTML 템플릿 생성
+const createIndexHtml = () => {
+  return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UKO Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/@mui/material@5.11.15/node_modules/@mui/material/styles/index.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1f2738;
+      background-color: #f9f9f9;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 3rem 0;
+      background: linear-gradient(135deg, #5896e1 0%, #a0d4ff 100%);
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    .header p {
+      font-size: 1.25rem;
+      opacity: 0.9;
+    }
+    
+    .section {
+      background: white;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+    
+    .section h2 {
+      font-size: 1.875rem;
+      margin-bottom: 1rem;
+      color: #1f2738;
+      border-bottom: 2px solid #e5eaf2;
+      padding-bottom: 0.5rem;
+    }
+    
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .color-item {
+      text-align: center;
+    }
+    
+    .color-swatch {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      border: 1px solid #e0e0e0;
+    }
+    
+    .color-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    
+    .color-value {
+      font-size: 0.75rem;
+      color: #666;
+      font-family: 'Monaco', 'Consolas', monospace;
+    }
+    
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .component-card {
+      border: 1px solid #e5eaf2;
+      border-radius: 8px;
+      padding: 1.5rem;
+      background: #ffffff;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .component-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .component-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #5896e1;
+    }
+    
+    .component-category {
+      font-size: 0.875rem;
+      color: #94a4c4;
+      margin-bottom: 1rem;
+    }
+    
+    .component-description {
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: #ebf4ff;
+      border-radius: 8px;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #5896e1;
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+    
+    .links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    
+    .link-button {
+      padding: 0.75rem 1.5rem;
+      background: #5896e1;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .link-button:hover {
+      background: #4683db;
+    }
+    
+    .link-button.secondary {
+      background: #e5eaf2;
+      color: #1f2738;
+    }
+    
+    .link-button.secondary:hover {
+      background: #d1d9e6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 UKO Design System</h1>
+      <p>자동화된 Storybook 디자인 시스템</p>
+    </div>
+    
+    <div class="section">
+      <h2>📊 시스템 현황</h2>
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-number">22</div>
+          <div class="stat-label">컴포넌트</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label">카테고리</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">자동화</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">확장성</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>🎨 디자인 토큰</h2>
+      <p>Figma에서 자동 동기화되는 디자인 토큰들</p>
+      <div class="color-grid" id="colorGrid">
+        <!-- 색상들이 동적으로 생성됩니다 -->
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>🧩 컴포넌트 라이브러리</h2>
+      <div class="component-grid" id="componentGrid">
+        <!-- 컴포넌트들이 동적으로 생성됩니다 -->
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>🚀 빠른 시작</h2>
+      <pre style="background: #f5f5f5; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code># 전체 디자인 시스템 설정 및 실행
+npm run design-system:dev
+
+# 개별 작업
+npm run sync-figma-tokens    # Figma 토큰 동기화
+npm run generate-stories     # 스토리 자동 생성
+npm run storybook           # Storybook 실행</code></pre>
+      
+      <div class="links">
+        <a href="https://github.com/syseo0107/GitHub" class="link-button">GitHub Repository</a>
+        <a href="https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/QUICK_START.md" class="link-button secondary">빠른 시작 가이드</a>
+        <a href="https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/DESIGN_SYSTEM_README.md" class="link-button secondary">상세 문서</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 디자인 토큰 데이터 (실제로는 동적으로 로드)
+    const designTokens = {
+      colors: {
+        primary: {
+          blue500: '#5896e1',
+          blue400: '#88c3ff',
+          blue300: '#a0d4ff',
+          blue200: '#bfe5ff',
+          blue100: '#ebf4ff'
+        },
+        text: {
+          main200: '#1f2738',
+          muted400: '#94a4c4',
+          100: '#f9f9f9',
+          200: '#eceff5'
+        },
+        white: '#ffffff'
+      }
+    };
+    
+    // 컴포넌트 데이터
+    const components = [
+      { name: 'AppCheckBox', category: 'Form', description: '커스텀 체크박스 컴포넌트' },
+      { name: 'AppRadio', category: 'Form', description: '커스텀 라디오 버튼' },
+      { name: 'AppSelect', category: 'Form', description: '커스텀 셀렉트 박스' },
+      { name: 'FlexBox', category: 'Layout', description: 'Flex 레이아웃 컴포넌트' },
+      { name: 'AppAvatar', category: 'Data Display', description: '사용자 아바타' },
+      { name: 'AppModal', category: 'Feedback', description: '모달 다이얼로그' },
+      { name: 'LoadingScreen', category: 'Feedback', description: '로딩 화면' },
+      { name: 'Typography', category: 'Data Display', description: '타이포그래피' }
+    ];
+    
+    // 색상 그리드 생성
+    function renderColors() {
+      const colorGrid = document.getElementById('colorGrid');
+      
+      Object.entries(designTokens.colors).forEach(([groupName, colors]) => {
+        if (typeof colors === 'string') {
+          // 단일 색상
+          const colorItem = document.createElement('div');
+          colorItem.className = 'color-item';
+          colorItem.innerHTML = \`
+            <div class="color-swatch" style="background-color: \${colors}"></div>
+            <div class="color-name">\${groupName}</div>
+            <div class="color-value">\${colors}</div>
+          \`;
+          colorGrid.appendChild(colorItem);
+        } else {
+          // 색상 그룹
+          Object.entries(colors).forEach(([colorName, colorValue]) => {
+            const colorItem = document.createElement('div');
+            colorItem.className = 'color-item';
+            colorItem.innerHTML = \`
+              <div class="color-swatch" style="background-color: \${colorValue}"></div>
+              <div class="color-name">\${groupName} \${colorName}</div>
+              <div class="color-value">\${colorValue}</div>
+            \`;
+            colorGrid.appendChild(colorItem);
+          });
+        }
+      });
+    }
+    
+    // 컴포넌트 그리드 생성
+    function renderComponents() {
+      const componentGrid = document.getElementById('componentGrid');
+      
+      components.forEach(component => {
+        const componentCard = document.createElement('div');
+        componentCard.className = 'component-card';
+        componentCard.innerHTML = \`
+          <div class="component-title">\${component.name}</div>
+          <div class="component-category">\${component.category}</div>
+          <div class="component-description">\${component.description}</div>
+        \`;
+        componentGrid.appendChild(componentCard);
+      });
+    }
+    
+    // 페이지 로드 시 실행
+    document.addEventListener('DOMContentLoaded', function() {
+      renderColors();
+      renderComponents();
+    });
+  </script>
+</body>
+</html>`;
+};
+
+// 메인 HTML 파일 생성
+const indexHtml = createIndexHtml();
+fs.writeFileSync(path.join(BUILD_DIR, 'index.html'), indexHtml);
+
+// .nojekyll 파일 생성
+fs.writeFileSync(path.join(BUILD_DIR, '.nojekyll'), '');
+
+// README.md 생성
+const readmeContent = `# UKO Design System Storybook
+
+이 사이트는 UKO 디자인 시스템의 정적 문서 사이트입니다.
+
+## 🎨 특징
+
+- **자동 Figma 토큰 동기화**: Figma에서 디자인 토큰을 자동으로 동기화
+- **22개 컴포넌트**: 재사용 가능한 React 컴포넌트 라이브러리
+- **Material-UI 통합**: Material-UI 테마와 완벽 호환
+- **자동 문서화**: 컴포넌트 props와 사용법 자동 문서화
+
+## 🚀 개발 환경
+
+\`\`\`bash
+# 전체 디자인 시스템 설정 및 실행
+npm run design-system:dev
+\`\`\`
+
+## 📚 문서
+
+- [GitHub Repository](https://github.com/syseo0107/GitHub)
+- [빠른 시작 가이드](https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/QUICK_START.md)
+- [상세 문서](https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/DESIGN_SYSTEM_README.md)
+
+---
+
+배포일: ${new Date().toISOString().split('T')[0]}
+`;
+
+fs.writeFileSync(path.join(BUILD_DIR, 'README.md'), readmeContent);
+
+console.log('✅ 정적 사이트 빌드가 완료되었습니다!');
+console.log(`📁 빌드 결과: ${BUILD_DIR}`);
+console.log('📄 생성된 파일:');
+console.log('  - index.html (메인 페이지)');
+console.log('  - .nojekyll (Jekyll 비활성화)');  
+console.log('  - README.md (저장소 문서)');

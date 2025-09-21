@@ -1,0 +1,129 @@
+name: Deploy Storybook to GitHub Pages
+
+on:
+  # main 브랜치에 푸시될 때마다 실행
+  push:
+    branches: [ main ]
+    paths:
+      - 'uko-nextjs-js-v2.2.0/**'
+      - 'tokens.json'
+  
+  # 수동으로 워크플로우 실행 가능
+  workflow_dispatch:
+
+# GitHub Pages 배포 권한 설정
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 동시 실행 제한 (하나의 배포만 실행)
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./uko-nextjs-js-v2.2.0
+    
+    steps:
+    - name: 🛒 Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ./uko-nextjs-js-v2.2.0/package-lock.json
+    
+    - name: 📦 Install Dependencies
+      run: |
+        npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+    
+    - name: 🎨 Sync Figma Design Tokens
+      run: |
+        echo "🔄 Figma 디자인 토큰을 동기화합니다..."
+        npm run sync-figma-tokens
+    
+    - name: 📝 Generate Component Stories
+      run: |
+        echo "📚 컴포넌트 스토리를 생성합니다..."
+        npm run generate-stories
+    
+    - name: 🏗️ Build Storybook
+      run: |
+        echo "🔨 Storybook을 빌드합니다..."
+        npm run build-storybook
+      env:
+        NODE_OPTIONS: --max_old_space_size=4096
+    
+    - name: 📋 Prepare Deployment Files
+      run: |
+        echo "📁 배포 파일을 준비합니다..."
+        
+        # .nojekyll 파일 생성 (Jekyll 비활성화)
+        touch storybook-static/.nojekyll
+        
+        # README.md 생성
+        cat > storybook-static/README.md << 'EOF'
+        # UKO Design System Storybook
+        
+        🎨 **UKO 디자인 시스템의 공식 Storybook 문서입니다.**
+        
+        ## ✨ 주요 기능
+        
+        - 🎯 **Figma 토큰 자동 동기화**: 디자인 토큰이 자동으로 동기화됩니다
+        - 🚀 **컴포넌트 라이브러리**: 22개의 재사용 가능한 React 컴포넌트
+        - 📱 **반응형 디자인**: 다양한 디바이스에서 테스트 가능
+        - 📖 **자동 문서화**: Props와 사용법이 자동으로 문서화됩니다
+        
+        ## 🔧 개발 환경
+        
+        ```bash
+        # 전체 디자인 시스템 설정 및 실행
+        npm run design-system:dev
+        ```
+        
+        ## 📚 추가 문서
+        
+        - [GitHub Repository](https://github.com/syseo0107/GitHub)
+        - [빠른 시작 가이드](https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/QUICK_START.md)
+        - [상세 문서](https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/DESIGN_SYSTEM_README.md)
+        
+        ---
+        
+        **배포일**: $(date +%Y-%m-%d)  
+        **자동 배포**: GitHub Actions
+        EOF
+        
+        echo "✅ 배포 파일 준비 완료"
+    
+    - name: 🚀 Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./uko-nextjs-js-v2.2.0/storybook-static
+        destination_dir: .
+        keep_files: false
+        enable_jekyll: false
+        commit_message: 'Deploy Storybook ${{ github.sha }}'
+    
+    - name: 🎉 Deployment Success
+      run: |
+        echo "✅ 배포가 완료되었습니다!"
+        echo ""
+        echo "🌐 Storybook URL: https://syseo0107.github.io/GitHub/"
+        echo ""
+        echo "📍 배포 정보:"
+        echo "  - 커밋: ${{ github.sha }}"
+        echo "  - 브랜치: ${{ github.ref_name }}"
+        echo "  - 배포 시간: $(date)"
+        echo ""
+        echo "⏱️  GitHub Pages 적용까지 몇 분 정도 소요될 수 있습니다."

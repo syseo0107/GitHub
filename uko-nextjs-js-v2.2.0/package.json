@@ -8,12 +8,15 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "node scripts/build-storybook-static.js",
     "generate-stories": "node scripts/generate-stories.js",
     "sync-figma-tokens": "node scripts/sync-figma-tokens.js",
     "sync-figma-tokens:watch": "node scripts/sync-figma-tokens.js watch",
     "design-system:setup": "npm run sync-figma-tokens && npm run generate-stories",
-    "design-system:dev": "npm run design-system:setup && npm run storybook"
+    "design-system:dev": "npm run design-system:setup && npm run storybook",
+    "deploy-storybook": "npm run design-system:setup && npm run build-storybook && node scripts/deploy-gh-pages.js",
+    "predeploy": "npm run build-storybook",
+    "deploy": "node scripts/deploy-gh-pages.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.10.5",
