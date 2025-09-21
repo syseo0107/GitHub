@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "node scripts/build-complete-storybook.js",
+    "build-storybook": "node scripts/build-live-storybook.js",
     "generate-stories": "node scripts/generate-stories.js",
     "sync-figma-tokens": "node scripts/sync-figma-tokens.js",
     "sync-figma-tokens:watch": "node scripts/sync-figma-tokens.js watch",
