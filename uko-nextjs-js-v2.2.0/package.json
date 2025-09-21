@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "generate-stories": "node scripts/generate-stories.js",
+    "sync-figma-tokens": "node scripts/sync-figma-tokens.js",
+    "sync-figma-tokens:watch": "node scripts/sync-figma-tokens.js watch",
+    "design-system:setup": "npm run sync-figma-tokens && npm run generate-stories",
+    "design-system:dev": "npm run design-system:setup && npm run storybook"
   },
   "dependencies": {
     "@emotion/cache": "^11.10.5",
