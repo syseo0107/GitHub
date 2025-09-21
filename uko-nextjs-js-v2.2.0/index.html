@@ -3,9 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UKO Design System - Interactive Storybook</title>
+  <title>UKO Design System - Live Interactive Storybook</title>
+  
+  <!-- React & ReactDOM -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Material-UI -->
+  <script src="https://unpkg.com/@mui/material@5.11.15/umd/material-ui.production.min.js"></script>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
   <style>
     * {
       margin: 0;
@@ -20,7 +32,7 @@
       background-color: #f9f9f9;
     }
     
-    .app-container {
+    .storybook-container {
       display: flex;
       height: 100vh;
     }
@@ -102,6 +114,7 @@
       border: 1px solid #e5eaf2;
       border-radius: 8px;
       margin-bottom: 2rem;
+      background: #ffffff;
     }
     
     .preview-header {
@@ -113,7 +126,7 @@
     .preview-title {
       font-size: 1.125rem;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
     
     .preview-description {
@@ -123,16 +136,39 @@
     
     .preview-content {
       padding: 2rem;
-      min-height: 200px;
+      min-height: 120px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     
-    .controls {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid #e5eaf2;
-      background: #f9f9f9;
+    .breadcrumb {
+      font-size: 0.875rem;
+      color: #94a4c4;
+      margin-bottom: 1rem;
+    }
+    
+    .breadcrumb a {
+      color: #5896e1;
+      text-decoration: none;
+    }
+    
+    .github-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #24292e;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    
+    .github-button:hover {
+      background: #1b1f23;
     }
     
     .intro-content {
@@ -181,223 +217,55 @@
       margin-top: 0.5rem;
     }
     
-    .link-button {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background: #5896e1;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 500;
-      margin: 0.5rem;
-      transition: all 0.2s;
+    .demo-container {
+      width: 100%;
+      max-width: none;
     }
     
-    .link-button:hover {
-      background: #4683db;
-      transform: translateY(-1px);
-    }
-    
-    .link-button.secondary {
-      background: transparent;
-      color: #5896e1;
-      border: 1px solid #5896e1;
-    }
-    
-    .link-button.secondary:hover {
-      background: #5896e1;
-      color: white;
-    }
-    
-    .component-demo {
-      padding: 2rem;
-      border: 2px dashed #e5eaf2;
-      border-radius: 8px;
-      text-align: center;
-      background: #f9f9f9;
-      margin: 1rem 0;
-    }
-    
-    .demo-placeholder {
-      color: #94a4c4;
-      font-style: italic;
-    }
-    
-    .breadcrumb {
-      font-size: 0.875rem;
-      color: #94a4c4;
-      margin-bottom: 1rem;
-    }
-    
-    .breadcrumb a {
-      color: #5896e1;
-      text-decoration: none;
-    }
-    
-    .github-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #24292e;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    
-    .github-button:hover {
-      background: #1b1f23;
+    #component-demo-root {
+      width: 100%;
     }
   </style>
 </head>
 <body>
-  <div class="app-container">
+  <div class="storybook-container">
     <nav class="sidebar">
-      <div class="logo">🎨 UKO Design System</div>
+      <div class="logo">🎨 UKO Live Storybook</div>
       
       <div class="nav-category">
         <h3>Overview</h3>
-        <a href="#introduction" class="nav-item active" onclick="showContent('introduction')">
-          소개
-        </a>
-        <a href="#tokens" class="nav-item" onclick="showContent('tokens')">
-          디자인 토큰
-        </a>
+        <a class="nav-item active" onclick="showIntroduction()">소개</a>
+        <a class="nav-item" onclick="showTokens()">디자인 토큰</a>
       </div>
       
-      
-      <div class="nav-category">
-        <h3>Components</h3>
-        
-          <a href="#AppAccordion" class="nav-item" onclick="showContent('AppAccordion')">
-            AppAccordion
-          </a>
-        
-      </div>
-    
       <div class="nav-category">
         <h3>Form Controls</h3>
-        
-          <a href="#AppCheckBox" class="nav-item" onclick="showContent('AppCheckBox')">
-            AppCheckBox
-          </a>
-        
-          <a href="#AppRadio" class="nav-item" onclick="showContent('AppRadio')">
-            AppRadio
-          </a>
-        
-          <a href="#AppSelect" class="nav-item" onclick="showContent('AppSelect')">
-            AppSelect
-          </a>
-        
-          <a href="#ColorRadio" class="nav-item" onclick="showContent('ColorRadio')">
-            ColorRadio
-          </a>
-        
-          <a href="#RoundCheckBox" class="nav-item" onclick="showContent('RoundCheckBox')">
-            RoundCheckBox
-          </a>
-        
-          <a href="#AppTextField" class="nav-item" onclick="showContent('AppTextField')">
-            AppTextField
-          </a>
-        
-          <a href="#ImageUploadInput" class="nav-item" onclick="showContent('ImageUploadInput')">
-            ImageUploadInput
-          </a>
-        
-          <a href="#SearchInput" class="nav-item" onclick="showContent('SearchInput')">
-            SearchInput
-          </a>
-        
+        <a class="nav-item" onclick="showComponent('AppCheckBox')">AppCheckBox</a>
+        <a class="nav-item" onclick="showComponent('AppRadio')">AppRadio</a>
+        <a class="nav-item" onclick="showComponent('AppTextField')">AppTextField</a>
       </div>
-    
-      <div class="nav-category">
-        <h3>Feedback</h3>
-        
-          <a href="#AppModal" class="nav-item" onclick="showContent('AppModal')">
-            AppModal
-          </a>
-        
-          <a href="#LoadingScreen" class="nav-item" onclick="showContent('LoadingScreen')">
-            LoadingScreen
-          </a>
-        
-      </div>
-    
-      <div class="nav-category">
-        <h3>Navigation</h3>
-        
-          <a href="#AppPagination" class="nav-item" onclick="showContent('AppPagination')">
-            AppPagination
-          </a>
-        
-      </div>
-    
-      <div class="nav-category">
-        <h3>Data Display</h3>
-        
-          <a href="#IconWrapper" class="nav-item" onclick="showContent('IconWrapper')">
-            IconWrapper
-          </a>
-        
-          <a href="#Typography" class="nav-item" onclick="showContent('Typography')">
-            Typography
-          </a>
-        
-          <a href="#AppAvatar" class="nav-item" onclick="showContent('AppAvatar')">
-            AppAvatar
-          </a>
-        
-          <a href="#AvatarBadge" class="nav-item" onclick="showContent('AvatarBadge')">
-            AvatarBadge
-          </a>
-        
-      </div>
-    
-      <div class="nav-category">
-        <h3>Utils</h3>
-        
-          <a href="#MoreOptions" class="nav-item" onclick="showContent('MoreOptions')">
-            MoreOptions
-          </a>
-        
-          <a href="#RTL" class="nav-item" onclick="showContent('RTL')">
-            RTL
-          </a>
-        
-          <a href="#ScrollBar" class="nav-item" onclick="showContent('ScrollBar')">
-            ScrollBar
-          </a>
-        
-      </div>
-    
+      
       <div class="nav-category">
         <h3>Layout</h3>
-        
-          <a href="#FlexBetween" class="nav-item" onclick="showContent('FlexBetween')">
-            FlexBetween
-          </a>
-        
-          <a href="#FlexBox" class="nav-item" onclick="showContent('FlexBox')">
-            FlexBox
-          </a>
-        
-          <a href="#FlexRowAlign" class="nav-item" onclick="showContent('FlexRowAlign')">
-            FlexRowAlign
-          </a>
-        
+        <a class="nav-item" onclick="showComponent('FlexBox')">FlexBox</a>
+        <a class="nav-item" onclick="showComponent('FlexBetween')">FlexBetween</a>
       </div>
-    
+      
+      <div class="nav-category">
+        <h3>Data Display</h3>
+        <a class="nav-item" onclick="showComponent('AppAvatar')">AppAvatar</a>
+      </div>
+      
+      <div class="nav-category">
+        <h3>Feedback</h3>
+        <a class="nav-item" onclick="showComponent('LoadingScreen')">LoadingScreen</a>
+      </div>
     </nav>
     
     <div class="main-content">
       <header class="header">
         <div class="breadcrumb">
-          <a href="#introduction">UKO Design System</a> / <span id="current-section">소개</span>
+          <a href="#" onclick="showIntroduction()">UKO Design System</a> / <span id="current-section">소개</span>
         </div>
         <a href="https://github.com/syseo0107/GitHub" target="_blank" rel="noopener" class="github-button">
           <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -408,44 +276,8 @@
       </header>
       
       <main class="content">
-        <div id="content-area">
-          
-    <div class="intro-content">
-      <h1 class="intro-title">🎨 UKO Design System</h1>
-      <p class="intro-subtitle">자동화된 Figma 토큰 동기화와 컴포넌트 라이브러리</p>
-      
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-number">22</div>
-          <div class="stat-label">컴포넌트</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">3</div>
-          <div class="stat-label">색상 그룹</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">100%</div>
-          <div class="stat-label">자동화</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">∞</div>
-          <div class="stat-label">확장성</div>
-        </div>
-      </div>
-      
-      <div>
-        <a href="https://github.com/syseo0107/GitHub" target="_blank" class="link-button">
-          GitHub Repository
-        </a>
-        <a href="https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/QUICK_START.md" target="_blank" class="link-button secondary">
-          빠른 시작 가이드
-        </a>
-        <a href="https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/DESIGN_SYSTEM_README.md" target="_blank" class="link-button secondary">
-          상세 문서
-        </a>
-      </div>
-    </div>
-  
+        <div id="main-content">
+          <!-- 콘텐츠가 동적으로 렌더링됩니다 -->
         </div>
       </main>
     </div>
@@ -514,328 +346,519 @@
   }
 };
     
-    // 컴포넌트 데이터
-    window.components = [
-  {
-    "name": "AppAccordion",
-    "path": "AppAccordion.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/AppAccordion.jsx",
-    "category": "Components"
-  },
-  {
-    "name": "AppCheckBox",
-    "path": "AppCheckBox.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/AppCheckBox.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "AppModal",
-    "path": "AppModal.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/AppModal.jsx",
-    "category": "Feedback"
-  },
-  {
-    "name": "AppPagination",
-    "path": "AppPagination.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/AppPagination.jsx",
-    "category": "Navigation"
-  },
-  {
-    "name": "AppRadio",
-    "path": "AppRadio.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/AppRadio.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "AppSelect",
-    "path": "AppSelect.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/AppSelect.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "ColorRadio",
-    "path": "ColorRadio.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/ColorRadio.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "IconWrapper",
-    "path": "IconWrapper.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/IconWrapper.jsx",
-    "category": "Data Display"
-  },
-  {
-    "name": "LoadingScreen",
-    "path": "LoadingScreen.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/LoadingScreen.jsx",
-    "category": "Feedback"
-  },
-  {
-    "name": "MoreOptions",
-    "path": "MoreOptions.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/MoreOptions.jsx",
-    "category": "Utils"
-  },
-  {
-    "name": "RTL",
-    "path": "RTL.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/RTL.jsx",
-    "category": "Utils"
-  },
-  {
-    "name": "RoundCheckBox",
-    "path": "RoundCheckBox.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/RoundCheckBox.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "ScrollBar",
-    "path": "ScrollBar.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/ScrollBar.jsx",
-    "category": "Utils"
-  },
-  {
-    "name": "Typography",
-    "path": "Typography.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/Typography.jsx",
-    "category": "Data Display"
-  },
-  {
-    "name": "AppAvatar",
-    "path": "avatars/AppAvatar.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/avatars/AppAvatar.jsx",
-    "category": "Data Display"
-  },
-  {
-    "name": "AvatarBadge",
-    "path": "avatars/AvatarBadge.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/avatars/AvatarBadge.jsx",
-    "category": "Data Display"
-  },
-  {
-    "name": "FlexBetween",
-    "path": "flexbox/FlexBetween.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/flexbox/FlexBetween.jsx",
-    "category": "Layout"
-  },
-  {
-    "name": "FlexBox",
-    "path": "flexbox/FlexBox.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/flexbox/FlexBox.jsx",
-    "category": "Layout"
-  },
-  {
-    "name": "FlexRowAlign",
-    "path": "flexbox/FlexRowAlign.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/flexbox/FlexRowAlign.jsx",
-    "category": "Layout"
-  },
-  {
-    "name": "AppTextField",
-    "path": "input-fields/AppTextField.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/input-fields/AppTextField.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "ImageUploadInput",
-    "path": "input-fields/ImageUploadInput.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/input-fields/ImageUploadInput.jsx",
-    "category": "Form Controls"
-  },
-  {
-    "name": "SearchInput",
-    "path": "input-fields/SearchInput.jsx",
-    "fullPath": "/home/user/webapp/uko-nextjs-js-v2.2.0/src/components/input-fields/SearchInput.jsx",
-    "category": "Form Controls"
-  }
-];
-    
     // 현재 활성 섹션
     let currentSection = 'introduction';
     
-    // 네비게이션 함수
-    function showContent(sectionId) {
-      // 이전 활성 항목 제거
+    // Material-UI 테마 생성
+    const theme = MaterialUI.createTheme({
+      palette: {
+        primary: {
+          main: '#5896e1',
+        },
+        background: {
+          default: '#f9f9f9',
+          paper: '#ffffff',
+        },
+      },
+      typography: {
+        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      },
+    });
+
+    
+    // Material-UI 컴포넌트들
+    const { 
+      Box, 
+      Checkbox, 
+      Radio, 
+      TextField, 
+      Select, 
+      MenuItem, 
+      FormControl, 
+      InputLabel,
+      Button,
+      Typography,
+      Avatar,
+      Badge,
+      Modal,
+      CircularProgress,
+      Pagination
+    } = MaterialUI;
+    
+    // UKO 아이콘 컴포넌트들 (간단한 SVG로 대체)
+    window.CheckBoxIcon = (props) => React.createElement('svg', {
+      width: 16, height: 16, viewBox: '0 0 24 24', fill: 'currentColor',
+      style: { color: props.color === 'primary' ? '#5896e1' : 'inherit' }
+    }, React.createElement('path', { d: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' }));
+    
+    window.BlankCheckBoxIcon = (props) => React.createElement('svg', {
+      width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor',
+      style: { color: props.color === 'disabled' ? 'undefined' : 'inherit' }
+    }, React.createElement('rect', { x: 3, y: 3, width: 18, height: 18, rx: 2, ry: 2, strokeWidth: 2 }));
+    
+    // UKO 컴포넌트 구현들
+    window.AppCheckBox = (props) => {
+      return React.createElement(Checkbox, {
+        ...props,
+        disableRipple: true,
+        checkedIcon: React.createElement(window.CheckBoxIcon, { fontSize: 'small', color: 'primary' }),
+        icon: React.createElement(window.BlankCheckBoxIcon, { fontSize: 'small', color: 'disabled' })
+      });
+    };
+    
+    window.AppRadio = (props) => {
+      return React.createElement(Radio, {
+        ...props,
+        disableRipple: true,
+        sx: {
+          color: 'undefined',
+          '&.Mui-checked': {
+            color: '#5896e1'
+          }
+        }
+      });
+    };
+    
+    window.AppTextField = (props) => {
+      return React.createElement(TextField, {
+        ...props,
+        variant: props.variant || 'outlined',
+        sx: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '8px',
+            '& fieldset': {
+              borderColor: 'undefined'
+            },
+            '&:hover fieldset': {
+              borderColor: '#a0d4ff'
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#5896e1'
+            }
+          }
+        }
+      });
+    };
+    
+    window.FlexBox = (props) => {
+      const { children, ...otherProps } = props;
+      return React.createElement(Box, {
+        display: 'flex',
+        ...otherProps
+      }, children);
+    };
+    
+    window.FlexBetween = (props) => {
+      const { children, ...otherProps } = props;
+      return React.createElement(Box, {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        ...otherProps
+      }, children);
+    };
+    
+    window.AppAvatar = (props) => {
+      return React.createElement(Avatar, {
+        ...props,
+        sx: {
+          bgcolor: '#5896e1',
+          color: '#ffffff',
+          ...props.sx
+        }
+      });
+    };
+    
+    window.AppButton = (props) => {
+      return React.createElement(Button, {
+        ...props,
+        sx: {
+          borderRadius: '8px',
+          textTransform: 'none',
+          fontWeight: 500,
+          ...props.sx
+        }
+      });
+    };
+    
+    window.LoadingScreen = (props) => {
+      return React.createElement(Box, {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '200px',
+        flexDirection: 'column',
+        gap: 2
+      }, 
+        React.createElement(CircularProgress, { 
+          size: 40,
+          sx: { color: '#5896e1' }
+        }),
+        React.createElement(Typography, { variant: 'body2', color: 'text.secondary' }, 'Loading...')
+      );
+    };
+  
+    
+    // 컴포넌트 데모 함수들
+    const componentDemos = {
+      AppCheckBox: () => { 
+      const [checked, setChecked] = React.useState(false);
+      const [checked2, setChecked2] = React.useState(true);
+      
+      return React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '1rem' } },
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
+          React.createElement(window.AppCheckBox, {
+            checked: checked,
+            onChange: (e) => setChecked(e.target.checked)
+          }),
+          React.createElement('span', null, 'Unchecked State')
+        ),
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
+          React.createElement(window.AppCheckBox, {
+            checked: checked2,
+            onChange: (e) => setChecked2(e.target.checked)
+          }),
+          React.createElement('span', null, 'Checked State')
+        ),
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
+          React.createElement(window.AppCheckBox, {
+            checked: true,
+            disabled: true
+          }),
+          React.createElement('span', null, 'Disabled State')
+        )
+      );
+     },
+      AppRadio: () => { 
+      const [value, setValue] = React.useState('option1');
+      
+      return React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '1rem' } },
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
+          React.createElement(window.AppRadio, {
+            checked: value === 'option1',
+            onChange: () => setValue('option1'),
+            value: 'option1'
+          }),
+          React.createElement('span', null, 'Option 1')
+        ),
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
+          React.createElement(window.AppRadio, {
+            checked: value === 'option2',
+            onChange: () => setValue('option2'),
+            value: 'option2'
+          }),
+          React.createElement('span', null, 'Option 2')
+        ),
+        React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: '0.5rem' } },
+          React.createElement(window.AppRadio, {
+            checked: false,
+            disabled: true
+          }),
+          React.createElement('span', null, 'Disabled')
+        )
+      );
+     },
+      AppTextField: () => { 
+      const [value, setValue] = React.useState('');
+      
+      return React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '400px' } },
+        React.createElement(window.AppTextField, {
+          label: 'Default TextField',
+          value: value,
+          onChange: (e) => setValue(e.target.value),
+          placeholder: 'Enter text...'
+        }),
+        React.createElement(window.AppTextField, {
+          label: 'Required Field',
+          required: true,
+          placeholder: 'This field is required'
+        }),
+        React.createElement(window.AppTextField, {
+          label: 'Disabled Field',
+          disabled: true,
+          value: 'Disabled value'
+        }),
+        React.createElement(window.AppTextField, {
+          label: 'Multiline',
+          multiline: true,
+          rows: 3,
+          placeholder: 'Enter multiple lines...'
+        })
+      );
+     },
+      FlexBox: () => { 
+      return React.createElement('div', { style: { width: '100%' } },
+        React.createElement('h4', null, 'FlexBox Examples'),
+        React.createElement('div', { style: { marginBottom: '2rem' } },
+          React.createElement('p', { style: { marginBottom: '1rem', fontWeight: 500 } }, 'Basic Flex Layout:'),
+          React.createElement(window.FlexBox, { gap: 2, style: { padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '8px' } },
+            React.createElement('div', { style: { padding: '1rem', backgroundColor: '#ebf4ff', borderRadius: '6px' } }, 'Item 1'),
+            React.createElement('div', { style: { padding: '1rem', backgroundColor: '#ebf4ff', borderRadius: '6px' } }, 'Item 2'),
+            React.createElement('div', { style: { padding: '1rem', backgroundColor: '#ebf4ff', borderRadius: '6px' } }, 'Item 3')
+          )
+        ),
+        React.createElement('div', { style: { marginBottom: '2rem' } },
+          React.createElement('p', { style: { marginBottom: '1rem', fontWeight: 500 } }, 'Column Layout:'),
+          React.createElement(window.FlexBox, { flexDirection: 'column', gap: 1, style: { padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '8px' } },
+            React.createElement('div', { style: { padding: '0.5rem', backgroundColor: 'undefined', borderRadius: '6px' } }, 'Item A'),
+            React.createElement('div', { style: { padding: '0.5rem', backgroundColor: 'undefined', borderRadius: '6px' } }, 'Item B'),
+            React.createElement('div', { style: { padding: '0.5rem', backgroundColor: 'undefined', borderRadius: '6px' } }, 'Item C')
+          )
+        )
+      );
+     },
+      FlexBetween: () => { 
+      return React.createElement('div', { style: { width: '100%' } },
+        React.createElement('h4', null, 'FlexBetween Examples'),
+        React.createElement('div', { style: { marginBottom: '1rem' } },
+          React.createElement('p', { style: { marginBottom: '1rem', fontWeight: 500 } }, 'Space Between Layout:'),
+          React.createElement(window.FlexBetween, { style: { padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '8px', backgroundColor: '#f8f9fa' } },
+            React.createElement('span', { style: { fontWeight: 500 } }, 'Left Content'),
+            React.createElement('span', { style: { color: '#5896e1' } }, 'Right Content')
+          )
+        ),
+        React.createElement('div', null,
+          React.createElement('p', { style: { marginBottom: '1rem', fontWeight: 500 } }, 'Header Layout:'),
+          React.createElement(window.FlexBetween, { style: { padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '8px' } },
+            React.createElement('h3', { style: { margin: 0 } }, 'Page Title'),
+            React.createElement(Button, { variant: 'contained', size: 'small' }, 'Action')
+          )
+        )
+      );
+     },
+      AppAvatar: () => { 
+      return React.createElement('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' } },
+        React.createElement('div', { style: { textAlign: 'center' } },
+          React.createElement(window.AppAvatar, null, 'U'),
+          React.createElement('p', { style: { margin: '0.5rem 0 0 0', fontSize: '0.875rem' } }, 'Default')
+        ),
+        React.createElement('div', { style: { textAlign: 'center' } },
+          React.createElement(window.AppAvatar, { 
+            sx: { bgcolor: 'undefined' }
+          }, 'K'),
+          React.createElement('p', { style: { margin: '0.5rem 0 0 0', fontSize: '0.875rem' } }, 'Green')
+        ),
+        React.createElement('div', { style: { textAlign: 'center' } },
+          React.createElement(window.AppAvatar, { 
+            sx: { bgcolor: 'undefined' }
+          }, 'O'),
+          React.createElement('p', { style: { margin: '0.5rem 0 0 0', fontSize: '0.875rem' } }, 'Orange')
+        ),
+        React.createElement('div', { style: { textAlign: 'center' } },
+          React.createElement(window.AppAvatar, { 
+            sx: { width: 56, height: 56, fontSize: '1.5rem' }
+          }, 'L'),
+          React.createElement('p', { style: { margin: '0.5rem 0 0 0', fontSize: '0.875rem' } }, 'Large')
+        )
+      );
+     },
+      LoadingScreen: () => { 
+      return React.createElement(window.LoadingScreen);
+     }
+    };
+    
+    // 네비게이션 업데이트
+    function updateNavigation(activeItem) {
       document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.remove('active');
       });
       
-      // 새 활성 항목 추가
-      event.target.classList.add('active');
-      
-      // 브레드크럼 업데이트
-      const breadcrumb = document.getElementById('current-section');
-      
-      // 컨텐츠 영역 업데이트
-      const contentArea = document.getElementById('content-area');
-      
-      if (sectionId === 'introduction') {
-        breadcrumb.textContent = '소개';
-        contentArea.innerHTML = getIntroductionContent();
-      } else if (sectionId === 'tokens') {
-        breadcrumb.textContent = '디자인 토큰';
-        contentArea.innerHTML = getTokensContent();
-      } else {
-        // 컴포넌트 페이지
-        const component = window.components.find(c => c.name === sectionId);
-        if (component) {
-          breadcrumb.innerHTML = `<a href="#" onclick="showContent('introduction')">소개</a> / ${component.category} / ${component.name}`;
-          contentArea.innerHTML = getComponentContent(component);
-        }
+      if (activeItem) {
+        activeItem.classList.add('active');
       }
+    }
+    
+    // 소개 페이지
+    function showIntroduction() {
+      updateNavigation(event?.target);
+      document.getElementById('current-section').textContent = '소개';
       
-      currentSection = sectionId;
+      const content = React.createElement('div', { className: 'intro-content' },
+        React.createElement('h1', { className: 'intro-title' }, '🎨 UKO Live Storybook'),
+        React.createElement('p', { className: 'intro-subtitle' }, '실제 React 컴포넌트가 작동하는 라이브 디자인 시스템'),
+        React.createElement('div', { className: 'stats-grid' },
+          React.createElement('div', { className: 'stat-card' },
+            React.createElement('div', { className: 'stat-number' }, '7'),
+            React.createElement('div', { className: 'stat-label' }, '라이브 컴포넌트')
+          ),
+          React.createElement('div', { className: 'stat-card' },
+            React.createElement('div', { className: 'stat-number' }, '100%'),
+            React.createElement('div', { className: 'stat-label' }, '인터랙티브')
+          ),
+          React.createElement('div', { className: 'stat-card' },
+            React.createElement('div', { className: 'stat-number' }, '∞'),
+            React.createElement('div', { className: 'stat-label' }, '가능성')
+          )
+        ),
+        React.createElement('p', { style: { fontSize: '1.1rem', marginTop: '2rem' } },
+          '왼쪽 사이드바에서 컴포넌트를 선택하면 실제로 작동하는 React 컴포넌트를 확인할 수 있습니다!'
+        )
+      );
+      
+      ReactDOM.render(
+        React.createElement(MaterialUI.ThemeProvider, { theme },
+          React.createElement(MaterialUI.CssBaseline),
+          content
+        ),
+        document.getElementById('main-content')
+      );
     }
     
-    // 소개 컨텐츠
-    function getIntroductionContent() {
-      return `
-        <div class="intro-content">
-          <h1 class="intro-title">🎨 UKO Design System</h1>
-          <p class="intro-subtitle">자동화된 Figma 토큰 동기화와 컴포넌트 라이브러리</p>
-          
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-number">${window.components.length}</div>
-              <div class="stat-label">컴포넌트</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">${Object.keys(window.designTokens.colors).length}</div>
-              <div class="stat-label">색상 그룹</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">100%</div>
-              <div class="stat-label">자동화</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-number">∞</div>
-              <div class="stat-label">확장성</div>
-            </div>
-          </div>
-          
-          <div>
-            <a href="https://github.com/syseo0107/GitHub" target="_blank" class="link-button">
-              GitHub Repository
-            </a>
-            <a href="https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/QUICK_START.md" target="_blank" class="link-button secondary">
-              빠른 시작 가이드
-            </a>
-            <a href="https://github.com/syseo0107/GitHub/blob/main/uko-nextjs-js-v2.2.0/DESIGN_SYSTEM_README.md" target="_blank" class="link-button secondary">
-              상세 문서
-            </a>
-          </div>
-        </div>
-      `;
-    }
-    
-    // 토큰 컨텐츠
-    function getTokensContent() {
-      let colorHTML = '';
+    // 토큰 페이지
+    function showTokens() {
+      updateNavigation(event?.target);
+      document.getElementById('current-section').textContent = '디자인 토큰';
+      
+      const colorCards = [];
       Object.entries(window.designTokens.colors).forEach(([groupName, colors]) => {
         if (typeof colors === 'string') {
-          colorHTML += `
-            <div style="text-align: center; margin: 1rem;">
-              <div style="width: 80px; height: 80px; background: ${colors}; border-radius: 8px; margin: 0 auto 0.5rem; border: 1px solid #e0e0e0;"></div>
-              <div style="font-size: 0.875rem; font-weight: 500;">${groupName}</div>
-              <div style="font-size: 0.75rem; color: #666; font-family: monospace;">${colors}</div>
-            </div>
-          `;
+          colorCards.push(
+            React.createElement('div', { 
+              key: groupName,
+              style: { textAlign: 'center', margin: '1rem' }
+            },
+              React.createElement('div', {
+                style: {
+                  width: 80, height: 80, backgroundColor: colors,
+                  borderRadius: 8, margin: '0 auto 0.5rem',
+                  border: '1px solid #e0e0e0'
+                }
+              }),
+              React.createElement('div', { 
+                style: { fontSize: '0.875rem', fontWeight: 500 }
+              }, groupName),
+              React.createElement('code', {
+                style: { fontSize: '0.75rem', color: '#666' }
+              }, colors)
+            )
+          );
         } else {
           Object.entries(colors).forEach(([colorName, colorValue]) => {
-            colorHTML += `
-              <div style="text-align: center; margin: 1rem;">
-                <div style="width: 80px; height: 80px; background: ${colorValue}; border-radius: 8px; margin: 0 auto 0.5rem; border: 1px solid #e0e0e0;"></div>
-                <div style="font-size: 0.875rem; font-weight: 500;">${groupName} ${colorName}</div>
-                <div style="font-size: 0.75rem; color: #666; font-family: monospace;">${colorValue}</div>
-              </div>
-            `;
+            colorCards.push(
+              React.createElement('div', {
+                key: groupName + colorName,
+                style: { textAlign: 'center', margin: '1rem' }
+              },
+                React.createElement('div', {
+                  style: {
+                    width: 80, height: 80, backgroundColor: colorValue,
+                    borderRadius: 8, margin: '0 auto 0.5rem',
+                    border: '1px solid #e0e0e0'
+                  }
+                }),
+                React.createElement('div', {
+                  style: { fontSize: '0.875rem', fontWeight: 500 }
+                }, `${groupName} ${colorName}`),
+                React.createElement('code', {
+                  style: { fontSize: '0.75rem', color: '#666' }
+                }, colorValue)
+              )
+            );
           });
         }
       });
       
-      return `
-        <h1>디자인 토큰</h1>
-        <p>Figma에서 자동으로 동기화되는 디자인 토큰들입니다.</p>
-        
-        <div class="component-preview">
-          <div class="preview-header">
-            <div class="preview-title">색상 팔레트</div>
-            <div class="preview-description">UKO 디자인 시스템의 색상 토큰</div>
-          </div>
-          <div class="preview-content">
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem; width: 100%;">
-              ${colorHTML}
-            </div>
-          </div>
-        </div>
-        
-        <div class="component-preview">
-          <div class="preview-header">
-            <div class="preview-title">타이포그래피</div>
-            <div class="preview-description">폰트 크기와 가중치</div>
-          </div>
-          <div class="preview-content">
-            <div style="text-align: left; width: 100%;">
-              <div style="font-size: 2.25rem; margin-bottom: 1rem;">Heading 1</div>
-              <div style="font-size: 1.875rem; margin-bottom: 1rem;">Heading 2</div>
-              <div style="font-size: 1.5rem; margin-bottom: 1rem;">Heading 3</div>
-              <div style="font-size: 1.25rem; margin-bottom: 1rem;">Heading 4</div>
-              <div style="font-size: 1rem; margin-bottom: 1rem;">Body Text</div>
-              <div style="font-size: 0.875rem;">Small Text</div>
-            </div>
-          </div>
-        </div>
-      `;
+      const content = React.createElement('div', null,
+        React.createElement('h1', null, '디자인 토큰'),
+        React.createElement('p', { style: { marginBottom: '2rem' } }, 
+          'UKO 디자인 시스템에서 사용되는 색상, 타이포그래피, 간격 등의 디자인 토큰입니다.'
+        ),
+        React.createElement('div', { className: 'component-preview' },
+          React.createElement('div', { className: 'preview-header' },
+            React.createElement('div', { className: 'preview-title' }, '색상 팔레트'),
+            React.createElement('div', { className: 'preview-description' }, 'Figma에서 동기화된 색상 토큰')
+          ),
+          React.createElement('div', { className: 'preview-content' },
+            React.createElement('div', {
+              style: {
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                gap: '1rem',
+                width: '100%'
+              }
+            }, ...colorCards)
+          )
+        )
+      );
+      
+      ReactDOM.render(
+        React.createElement(MaterialUI.ThemeProvider, { theme },
+          React.createElement(MaterialUI.CssBaseline),
+          content
+        ),
+        document.getElementById('main-content')
+      );
     }
     
-    // 컴포넌트 컨텐츠
-    function getComponentContent(component) {
-      return `
-        <h1>${component.name}</h1>
-        <p>${component.category} 카테고리의 ${component.name} 컴포넌트입니다.</p>
-        
-        <div class="component-preview">
-          <div class="preview-header">
-            <div class="preview-title">기본 예제</div>
-            <div class="preview-description">${component.name}의 기본 상태</div>
-          </div>
-          <div class="preview-content">
-            <div class="component-demo">
-              <div class="demo-placeholder">
-                📦 ${component.name} 컴포넌트
-                <br><br>
-                <small>실제 React 컴포넌트는 개발 환경에서 확인하실 수 있습니다.</small>
-              </div>
-            </div>
-          </div>
-          <div class="controls">
-            <strong>Props:</strong> 개발 환경에서 `npm run design-system:dev` 실행 후 확인 가능
-          </div>
-        </div>
-        
-        <div class="component-preview">
-          <div class="preview-header">
-            <div class="preview-title">사용법</div>
-            <div class="preview-description">컴포넌트 import 및 사용 방법</div>
-          </div>
-          <div class="preview-content">
-            <pre style="background: #f5f5f5; padding: 1rem; border-radius: 6px; text-align: left; overflow-x: auto;"><code>import ${component.name} from 'components/${component.path}';
-
-function MyComponent() {
-  return (
-    &lt;${component.name} 
-      // props here
-    /&gt;
-  );
-}</code></pre>
-          </div>
-        </div>
-      `;
+    // 컴포넌트 페이지
+    function showComponent(componentName) {
+      updateNavigation(event?.target);
+      document.getElementById('current-section').innerHTML = `컴포넌트 / ${componentName}`;
+      
+      const demoFunction = componentDemos[componentName];
+      
+      if (!demoFunction) {
+        ReactDOM.render(
+          React.createElement('div', null,
+            React.createElement('h1', null, componentName),
+            React.createElement('p', null, '이 컴포넌트는 아직 구현되지 않았습니다.')
+          ),
+          document.getElementById('main-content')
+        );
+        return;
+      }
+      
+      const ComponentDemo = () => {
+        try {
+          return demoFunction();
+        } catch (error) {
+          return React.createElement('div', {
+            style: { 
+              padding: '2rem', 
+              textAlign: 'center', 
+              color: '#d32f2f',
+              backgroundColor: '#ffebee',
+              borderRadius: '8px'
+            }
+          }, 
+            React.createElement('h3', null, '렌더링 오류'),
+            React.createElement('p', null, error.message)
+          );
+        }
+      };
+      
+      const content = React.createElement('div', null,
+        React.createElement('h1', null, componentName),
+        React.createElement('p', { style: { marginBottom: '2rem', color: '#666' } },
+          `${componentName} 컴포넌트의 라이브 데모입니다. 아래에서 실제로 인터랙션해보세요!`
+        ),
+        React.createElement('div', { className: 'component-preview' },
+          React.createElement('div', { className: 'preview-header' },
+            React.createElement('div', { className: 'preview-title' }, '라이브 데모'),
+            React.createElement('div', { className: 'preview-description' }, 
+              '실제로 작동하는 React 컴포넌트입니다. 클릭하고 상호작용해보세요!'
+            )
+          ),
+          React.createElement('div', { className: 'preview-content' },
+            React.createElement('div', { className: 'demo-container' },
+              React.createElement(ComponentDemo)
+            )
+          )
+        )
+      );
+      
+      ReactDOM.render(
+        React.createElement(MaterialUI.ThemeProvider, { theme },
+          React.createElement(MaterialUI.CssBaseline),
+          content
+        ),
+        document.getElementById('main-content')
+      );
     }
     
-    // 페이지 로드 시 초기 설정
+    // 초기 로딩
     document.addEventListener('DOMContentLoaded', function() {
-      showContent('introduction');
+      showIntroduction();
     });
   </script>
 </body>
