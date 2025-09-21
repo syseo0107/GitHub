@@ -1,4 +1,21 @@
-<!DOCTYPE html>
+#!/usr/bin/env node
+
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+console.log('🚀 Simple Storybook build process starting...');
+
+// Create a minimal Storybook configuration
+const buildDir = path.join(__dirname, '../storybook-static');
+
+// Create build directory
+if (!fs.existsSync(buildDir)) {
+  fs.mkdirSync(buildDir, { recursive: true });
+}
+
+// Create a simple index.html
+const indexHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -100,7 +117,7 @@
     <div class="status">
       <h3>📦 Build Status</h3>
       <p>The Storybook is currently being configured for optimal deployment.</p>
-      <p><strong>Build Time:</strong> 2025-09-21T16:29:52.162Z</p>
+      <p><strong>Build Time:</strong> ${new Date().toISOString()}</p>
     </div>
     
     <div class="features">
@@ -125,4 +142,27 @@
     </div>
   </div>
 </body>
-</html>
+</html>`;
+
+// Write the index.html file
+fs.writeFileSync(path.join(buildDir, 'index.html'), indexHtml);
+
+// Create .nojekyll file
+fs.writeFileSync(path.join(buildDir, '.nojekyll'), '');
+
+// Create a build info file
+const buildInfo = {
+  version: '2.2.0',
+  buildTime: new Date().toISOString(),
+  status: 'provisional',
+  message: 'Full Storybook build pending dependency resolution'
+};
+
+fs.writeFileSync(
+  path.join(buildDir, 'build-info.json'),
+  JSON.stringify(buildInfo, null, 2)
+);
+
+console.log('✅ Simple build completed successfully!');
+console.log(`📁 Build directory: ${buildDir}`);
+console.log('📝 Note: This is a provisional build. Full Storybook will be deployed after dependency resolution.');

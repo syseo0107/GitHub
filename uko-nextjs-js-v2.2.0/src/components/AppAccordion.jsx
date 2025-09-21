@@ -1,6 +1,6 @@
 import ArrowForwardIosSharpIcon from "@mui/icons-material/ArrowForwardIosSharp";
 import { Accordion as MuiAccordion, AccordionDetails as MuiAccordionDetails, AccordionSummary as MuiAccordionSummary, styled } from "@mui/material";
-import { H6 } from "components/Typography";
+import { H6 } from "./Typography";
 // ---------------------------------------------------
 // styled components
 const Accordion = styled(MuiAccordion)(({

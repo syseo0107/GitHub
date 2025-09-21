@@ -20,7 +20,23 @@ const config = {
   },
   staticDirs: ["../public"],
   webpackFinal: async (config) => {
-    // Add any custom webpack configuration here
+    // Add absolute import support
+    config.resolve.modules.push(
+      require('path').resolve(__dirname, '../src')
+    );
+    
+    // Add alias for components
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'components': require('path').resolve(__dirname, '../src/components'),
+      'theme': require('path').resolve(__dirname, '../src/theme'),
+      'contexts': require('path').resolve(__dirname, '../src/contexts'),
+      'hooks': require('path').resolve(__dirname, '../src/hooks'),
+      'utils': require('path').resolve(__dirname, '../src/utils'),
+      'layouts': require('path').resolve(__dirname, '../src/layouts'),
+      'page-sections': require('path').resolve(__dirname, '../src/page-sections'),
+    };
+    
     return config;
   },
 };
